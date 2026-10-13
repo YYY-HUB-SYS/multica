@@ -14,7 +14,11 @@ concurrency:
 
 jobs:
   build-ipa:
-    runs-on: macos-26 # Xcode 26.x：RN 0.86 要求 >=16.1；ExpoModulesJSI xcframework 要求 Swift tools 6.2
+    # macos-26 镜像的 Xcode 26.0.1 缺 iOS platform 组件（GitHub 每镜像只预装 3 个
+    # platform 版本，镜像更新后 26.0 被挤出），destination 匹配必挂。
+    # xcode-27 preview 镜像是新构建，platform 组件齐全，且 Xcode 27 >= 26.4 满足
+    # RN 0.86 / ExpoModulesJSI(Swift 6.2+) 的要求。
+    runs-on: xcode-27
     timeout-minutes: 120
     permissions:
       contents: write # 失败时把诊断日志 commit 回仓库，便于外部读取
@@ -30,8 +34,18 @@ jobs:
       - name: Pin Xcode and verify iOS SDK
         run: |
           set +e
-          echo "== Xcode apps =="
-          ls /Applications | grep -i xcode
+          INV="$GITHUB_WORKSPACE/ci-diagnostics/xcode-inventory.txt"
+          {
+            echo "== Xcode apps =="
+            ls /Applications | grep -i xcode
+            echo "== Platforms dir =="
+            for X in /Applications/Xcode*.app; do
+              echo "-- $X"
+              ls "$X/Contents/Developer/Platforms" 2>/dev/null
+              ls "$X/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport" 2>/dev/null | head -5 || echo "(no DeviceSupport)"
+            done
+          } > "$INV" 2>&1
+          cat "$INV"
           # 遍历所有 Xcode，选第一个带 iphoneos SDK 的（镜像漂移时可能有的是坏的）
           for XCODE_APP in $(ls -d /Applications/Xcode*.app 2>/dev/null); do
             sudo xcode-select -s "$XCODE_APP" || true
@@ -43,20 +57,21 @@ jobs:
               XCODE_APP=""
             fi
           done
-          if [ -z "$XCODE_APP" ]; then
-            echo "== no Xcode with iphoneos SDK; try downloadPlatform =="
-            sudo xcode-select -s /Applications/Xcode*.app || true
-            sudo xcodebuild -downloadPlatform iOS || echo "download failed"
-            xcode-select -p
-          fi
-          # 即使有 SDK 也补一次 platform 组件（destination 类检查需要它；archive 路线不依赖）
-          echo "== ensure iOS platform component =="
-          timeout 300 sudo xcodebuild -downloadPlatform iOS 2>&1 | tail -3 || echo "downloadPlatform skipped/failed (ok for archive route)"
           xcodebuild -version
-          echo "== iphoneos SDK =="
-          xcrun --sdk iphoneos --show-sdk-path || echo "SDK_MISSING"
-          xcrun --sdk iphoneos --show-sdk-version || echo "SDK_VERSION_MISSING"
-          xcrun simctl list runtimes 2>/dev/null | head -5
+          {
+            echo "== showsdks =="
+            xcodebuild -showsdks 2>&1
+            echo "== simctl runtimes =="
+            xcrun simctl list runtimes 2>&1 | head -10
+          } >> "$INV" 2>&1
+          echo "== ensure iOS platform component =="
+          timeout 240 sudo xcodebuild -downloadPlatform iOS >> "$INV" 2>&1
+          echo "downloadPlatform exit=$?"
+          echo "downloadPlatform exit=$?" >> "$INV"
+          xcodebuild -showsdks 2>&1 | tee -a "$INV"
+          # 把镜像实况塞进 annotation（失败时页面上直接可见）
+          INV_TXT=$(head -c 1200 "$INV" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g')
+          echo "::notice title=xcode-inventory::$INV_TXT"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -220,21 +235,18 @@ jobs:
             exit 1
           fi
           {
-            # 镜像漂移导致 iOS platform 组件缺失时：
-            #  -destination 'generic/platform=iOS' -> "iOS 26.0 is not installed"
-            #  build + -sdk iphoneos            -> "Found no destinations"
-            # archive action 本身就是 generic device 语义，不走 destination 匹配，
-            # 是这类镜像上唯一可靠的编译入口。产物在 ../build/Multica.xcarchive。
+            # #12 已验证成功的组合：destination + build + DerivedData。
+            # （archive / -sdk 路线在新 Xcode 同样要 destination 匹配，已实测无效）
             xcodebuild \
               -workspace "$WORKSPACE" \
               -scheme "$SCHEME" \
               -configuration Release \
-              -sdk iphoneos \
-              -archivePath ../build/Multica.xcarchive \
+              -derivedDataPath ../build/DerivedData \
+              -destination 'generic/platform=iOS' \
               CODE_SIGNING_ALLOWED=NO \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGN_IDENTITY="" \
-              archive
+              build
             echo "xcodebuild exit=$?"
           } > "$LOG" 2>&1
           tail -40 "$LOG"

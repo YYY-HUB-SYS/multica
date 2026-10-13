@@ -6,7 +6,7 @@ Build settings from command line:
     CODE_SIGNING_ALLOWED = NO
     CODE_SIGNING_REQUIRED = NO
 
-2026-10-13 23:17:20.963 xcodebuild[27234:71661] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-17-0020.xcresult
+2026-10-13 23:25:12.552 xcodebuild[7989:23785] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-25-0012.xcresult
 xcodebuild: error: Unable to find a destination matching the provided destination specifier:
 		{ generic:1, platform:iOS }
 

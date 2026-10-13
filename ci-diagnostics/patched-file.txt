@@ -1,0 +1,1 @@
+/Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/pluginConfig.js

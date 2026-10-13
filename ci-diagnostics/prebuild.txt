@@ -1,12 +1,6 @@
-Error: `ios.deploymentTarget` needs to be at least version 16.4.
-Error: `ios.deploymentTarget` needs to be at least version 16.4.
-    at maybeThrowInvalidVersions (/Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/pluginConfig.js:268:19)
-    at validateConfig (/Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/pluginConfig.js:311:5)
-    at withBuildProperties (/Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/withBuildProperties.js:15:60)
-    at withStaticPlugin (/Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config-plugins@57.0.10_typescript@5.9.3/node_modules/@expo/config-plugins/build/plugins/withStaticPlugin.js:144:12)
-    at /Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config-plugins@57.0.10_typescript@5.9.3/node_modules/@expo/config-plugins/build/plugins/withPlugins.js:28:84
-    at Array.reduce (<anonymous>)
-    at withPlugins (/Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config-plugins@57.0.10_typescript@5.9.3/node_modules/@expo/config-plugins/build/plugins/withPlugins.js:28:18)
-    at withConfigPlugins (/Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config@57.0.10_typescript@5.9.3/node_modules/@expo/config/build/plugins/withConfigPlugins.js:33:47)
-    at fillAndReturnConfig (/Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config@57.0.10_typescript@5.9.3/node_modules/@expo/config/build/Config.js:247:78)
-    at getConfig (/Users/runner/work/multica/multica/node_modules/.pnpm/@expo+config@57.0.10_typescript@5.9.3/node_modules/@expo/config/build/Config.js:300:12)
+- Creating native directory (./ios)
+✔ Created native directory
+- Updating package.json
+✔ Updated package.json | no changes
+- Running prebuild
+✔ Finished prebuild

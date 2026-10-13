@@ -36,46 +36,87 @@ jobs:
       - name: Install dependencies (workspace root)
         run: pnpm install
 
-      - name: Prebuild iOS project (with pod install)
+      - name: Prebuild iOS project (generate native project only)
         env:
           APP_ENV: production
           EXPO_BUNDLE_IDENTIFIER_PROD: com.yourname.multica
+          EXPO_NO_DOCTOR: 1
+          EXPO_NO_TELEMETRY: 1
+          CI: true
         run: |
           cd apps/mobile
           # 生产环境变量（云后端 multica.ai）；本地覆盖文件不存在则用默认
           if [ ! -f .env.production.local ]; then
             cp .env.production.example .env.production.local 2>/dev/null || true
           fi
-          # 关键修复：不加 --no-install，让 prebuild 自动完成 node_modules 关联 + pod install
-          pnpm exec expo prebuild -p ios
+          # 只生成 ios 工程，pod install 由下一步显式执行（便于抓日志）
+          pnpm exec expo prebuild -p ios --no-install
+          ls -la ios
 
-      - name: Ensure CocoaPods dependencies
+      - name: Upload CI diagnostics
+        if: always()
         run: |
+          mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
+          echo "collected at $(date -u +%FT%TZ), run ${GITHUB_RUN_ID}" > "$GITHUB_WORKSPACE/ci-diagnostics/meta.txt"
+
+      - name: Install CocoaPods dependencies (with diagnostics)
+        id: pods
+        run: |
+          set -o pipefail
           cd apps/mobile/ios
-          if [ ! -d Pods ]; then
-            echo "Pods missing, running pod install manually..."
+          {
+            echo "== versions =="
+            node -v
+            ruby -v
+            pod --version || true
+            xcodebuild -version
+            echo "== ios dir =="
+            ls -la
+            echo "== pod install =="
             pod install --repo-update
-          else
-            echo "Pods directory present."
+          } 2>&1 | tee "$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log"
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "::error title=pod install failed::$(tail -c 1500 "$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log" | tr '\n' ' ')"
+            cd "$GITHUB_WORKSPACE"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ci-diagnostics || true
+            git commit -m "ci: pod install diagnostics (run ${GITHUB_RUN_ID})" || true
+            git push || true
+            exit "$status"
           fi
-          ls -la
 
       - name: Build unsigned .app (Release)
         run: |
+          set -o pipefail
           cd apps/mobile/ios
-          # 诊断：列出可用 scheme，便于失败时定位
-          xcodebuild -list -workspace multica.xcworkspace || true
-          # 用 xcodebuild 构建 Release，关闭签名 -> 产出未签名 .app
-          xcodebuild \
-            -workspace multica.xcworkspace \
-            -scheme multica \
-            -configuration Release \
-            -derivedDataPath ../build/DerivedData \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build
+          {
+            echo "== schemes =="
+            xcodebuild -list -workspace multica.xcworkspace || true
+            echo "== build =="
+            xcodebuild \
+              -workspace multica.xcworkspace \
+              -scheme multica \
+              -configuration Release \
+              -derivedDataPath ../build/DerivedData \
+              -destination 'generic/platform=iOS' \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY="" \
+              build
+          } 2>&1 | tee "$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log"
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "::error title=xcodebuild failed::$(tail -c 1500 "$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log" | tr '\n' ' ')"
+            cd "$GITHUB_WORKSPACE"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add ci-diagnostics || true
+            git commit -m "ci: xcodebuild diagnostics (run ${GITHUB_RUN_ID})" || true
+            git push || true
+            exit "$status"
+          fi
 
       - name: Package unsigned .ipa
         run: |
@@ -83,6 +124,7 @@ jobs:
           APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d | head -1)
           echo "APP_PATH=$APP_PATH"
           mkdir -p build/Payload
+          rm -rf build/Payload/*.app
           cp -R "$APP_PATH" build/Payload/
           cd build
           zip -qr Multica-unsigned.ipa Payload

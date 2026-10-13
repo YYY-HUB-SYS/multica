@@ -27,12 +27,33 @@ jobs:
       - name: Prep diagnostics dir
         run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
 
-      - name: Pin Xcode
+      - name: Pin Xcode and verify iOS SDK
         run: |
           set +e
-          sudo xcode-select -s /Applications/Xcode_26.app || sudo xcode-select -s /Applications/Xcode_26.0.app || true
+          echo "== Xcode apps =="
+          ls /Applications | grep -i xcode
+          # 遍历所有 Xcode，选第一个带 iphoneos SDK 的（镜像漂移时可能有的是坏的）
+          for XCODE_APP in $(ls -d /Applications/Xcode*.app 2>/dev/null); do
+            sudo xcode-select -s "$XCODE_APP" || true
+            if xcrun --sdk iphoneos --show-sdk-path >/dev/null 2>&1; then
+              echo "SELECTED=$XCODE_APP (has iphoneos SDK)"
+              break
+            else
+              echo "skip $XCODE_APP (no iphoneos SDK)"
+              XCODE_APP=""
+            fi
+          done
+          if [ -z "$XCODE_APP" ]; then
+            echo "== no Xcode with iphoneos SDK; try downloadPlatform =="
+            sudo xcode-select -s /Applications/Xcode*.app || true
+            sudo xcodebuild -downloadPlatform iOS || echo "download failed"
+            xcode-select -p
+          fi
           xcodebuild -version
-          xcrun simctl list runtimes | head -5
+          echo "== iphoneos SDK =="
+          xcrun --sdk iphoneos --show-sdk-path || echo "SDK_MISSING"
+          xcrun --sdk iphoneos --show-sdk-version || echo "SDK_VERSION_MISSING"
+          xcrun simctl list runtimes 2>/dev/null | head -5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -188,6 +209,13 @@ jobs:
           [ -z "$SCHEME" ] && SCHEME=$(basename "$WORKSPACE" .xcworkspace)
           echo "WORKSPACE=$WORKSPACE SCHEME=$SCHEME"
           echo "::notice title=detected::workspace=$WORKSPACE schemes=$SCHEMES scheme=$SCHEME"
+          # SDK 预检：确保 iphoneos SDK 存在
+          SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path 2>/dev/null)
+          echo "SDK_PATH=$SDK_PATH"
+          if [ -z "$SDK_PATH" ]; then
+            echo "::error title=iphoneos-sdk-missing::xcrun cannot find iphoneos SDK. Xcode=$(xcodebuild -version 2>&1 | tr '\n' '|')"
+            exit 1
+          fi
           {
             xcodebuild \
               -workspace "$WORKSPACE" \

@@ -19,24 +19,23 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 10.28.2
 
-      - name: Install dependencies
-        run: |
-          cd apps/mobile
-          pnpm install --no-frozen-lockfile
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies (workspace root)
+        run: pnpm install
 
       - name: Prebuild iOS project
         env:
@@ -44,17 +43,20 @@ jobs:
           EXPO_BUNDLE_IDENTIFIER_PROD: com.yourname.multica
         run: |
           cd apps/mobile
-          # 生产环境变量（云后端 multica.ai）
-          if [ ! -f .env.production.local ]; then cp .env.production.example .env.production.local 2>/dev/null || true; fi
+          # 生产环境变量（云后端 multica.ai）；本地覆盖文件不存在则用默认
+          if [ ! -f .env.production.local ]; then
+            cp .env.production.example .env.production.local 2>/dev/null || true
+          fi
           pnpm exec expo prebuild -p ios --no-install
 
       - name: Build unsigned .app (Release)
         run: |
           cd apps/mobile/ios
           # 用 xcodebuild 构建 Release，关闭签名 -> 产出未签名 .app
+          # scheme 来自 app.config.ts 的 scheme: "multica"（小写）
           xcodebuild \
-            -workspace Multica.xcworkspace \
-            -scheme Multica \
+            -workspace multica.xcworkspace \
+            -scheme multica \
             -configuration Release \
             -derivedDataPath ../build/DerivedData \
             -destination 'generic/platform=iOS' \

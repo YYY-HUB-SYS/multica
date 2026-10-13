@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-ipa:
-    runs-on: macos-15
+    runs-on: macos-15 # Xcode 16.4 —— RN 0.86 要求 >= 16.1，macos-14 只有 15.4
     timeout-minutes: 120
     permissions:
       contents: write # 失败时把诊断日志 commit 回仓库，便于外部读取
@@ -66,7 +66,7 @@ jobs:
         env:
           LOG_NAME: pod-install.log
         run: |
-          set +e   # 关键：关闭 bash -e，否则失败会直接中止，诊断代码永远执行不到
+          set +e   # 关闭 bash -e，否则失败会直接中止，诊断代码永远执行不到
           cd apps/mobile/ios
           LOG="$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log"
           {
@@ -131,10 +131,14 @@ jobs:
             echo "::error title=workspace-not-found::ios dir listing: $(ls | tr '\n' '|' | cut -c1-600)"
             exit 1
           fi
-          SCHEMES=$(xcodebuild -list -workspace "$WORKSPACE" -json 2>/dev/null | tr -d '\n' | sed -n 's/.*"schemes": *\[\([^]]*\)\].*/\1/p' | tr -d '" ')
-          SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | grep -i '^multica$' | head -1)
+          RAW=$(xcodebuild -list -workspace "$WORKSPACE" 2>/dev/null)
+          SCHEMES=$(echo "$RAW" | awk '/Schemes:/{f=1;next} f && NF {gsub(/^[ \t]+/,""); if ($0 != "") print $0}' | tr '\n' ',')
+          SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | grep -i 'multica' | head -1)
           [ -z "$SCHEME" ] && SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | head -1)
-          echo "WORKSPACE=$WORKSPACE SCHEME=$SCHEME"
+          [ -z "$SCHEME" ] && SCHEME=$(basename "$WORKSPACE" .xcworkspace)
+          echo "WORKSPACE=$WORKSPACE SCHEMES=$SCHEMES SCHEME=$SCHEME"
+          echo "::notice title=detected::workspace=$WORKSPACE schemes=$SCHEMES scheme=$SCHEME"
+          echo "$RAW" > "$GITHUB_WORKSPACE/ci-diagnostics/xcode-list.txt"
           {
             xcodebuild \
               -workspace "$WORKSPACE" \

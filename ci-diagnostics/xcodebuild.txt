@@ -1,15 +1,12 @@
 Command line invocation:
-    /Applications/Xcode_26.0.1.app/Contents/Developer/usr/bin/xcodebuild -workspace Multica.xcworkspace -scheme Multica -configuration Release -derivedDataPath ../build/DerivedData -destination generic/platform=iOS CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= build
+    /Applications/Xcode_26.0.1.app/Contents/Developer/usr/bin/xcodebuild -workspace Multica.xcworkspace -scheme Multica -configuration Release -sdk iphoneos -derivedDataPath ../build/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= build
 
 Build settings from command line:
     CODE_SIGN_IDENTITY = 
     CODE_SIGNING_ALLOWED = NO
     CODE_SIGNING_REQUIRED = NO
+    SDKROOT = iphoneos26.0
 
-2026-10-13 23:25:12.552 xcodebuild[7989:23785] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-25-0012.xcresult
-xcodebuild: error: Unable to find a destination matching the provided destination specifier:
-		{ generic:1, platform:iOS }
-
-	Ineligible destinations for the "Multica" scheme:
-		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device, error:iOS 26.0 is not installed. Please download and install the platform from Xcode > Settings > Components. }
+2026-10-13 23:32:48.964 xcodebuild[10955:32567] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-32-0048.xcresult
+xcodebuild: error: Found no destinations for the scheme 'Multica' and action build.
 xcodebuild exit=70

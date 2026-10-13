@@ -6,14 +6,14 @@ Xcode 26.0.1
 Build version 17A400
 == ios dir ==
 total 32
-drwxr-xr-x   8 runner  staff   256 Oct 13 23:23 .
-drwxr-xr-x  35 runner  staff  1120 Oct 13 23:23 ..
--rw-r--r--   1 runner  staff   321 Oct 13 23:23 .gitignore
--rw-r--r--   1 runner  staff   482 Oct 13 23:23 .xcode.env
-drwxr-xr-x   9 runner  staff   288 Oct 13 23:23 Multica
-drwxr-xr-x   5 runner  staff   160 Oct 13 23:23 Multica.xcodeproj
--rw-r--r--   1 runner  staff  2895 Oct 13 23:23 Podfile
--rw-r--r--   1 runner  staff   466 Oct 13 23:23 Podfile.properties.json
+drwxr-xr-x   8 runner  staff   256 Oct 13 23:30 .
+drwxr-xr-x  35 runner  staff  1120 Oct 13 23:30 ..
+-rw-r--r--   1 runner  staff   321 Oct 13 23:30 .gitignore
+-rw-r--r--   1 runner  staff   482 Oct 13 23:30 .xcode.env
+drwxr-xr-x   9 runner  staff   288 Oct 13 23:30 Multica
+drwxr-xr-x   5 runner  staff   160 Oct 13 23:30 Multica.xcodeproj
+-rw-r--r--   1 runner  staff  2895 Oct 13 23:30 Podfile
+-rw-r--r--   1 runner  staff   466 Oct 13 23:30 Podfile.properties.json
 == pod install ==
 [Expo] EXPO_USE_PRECOMPILED_MODULES=1 was set, but React Native is configured to build from source (RCT_USE_PREBUILT_RNCORE is not 1). Precompiled Expo modules require the prebuilt React.xcframework, so every Expo module will be built from source for this install. To use precompiled modules, ensure `ios.buildReactNativeFromSource` is not `true` in the `expo-build-properties` plugin (the default uses the prebuilt framework), or export RCT_USE_PREBUILT_RNCORE=1 before running `pod install`.
 Using Expo modules
@@ -170,16 +170,16 @@ Fetching podspec for `hermes-engine` from `../../../node_modules/.pnpm/react-nat
 [Hermes] Cache miss: downloading hermes-ios-250829098.0.17-debug.tar.gz from https://repo1.maven.org/maven2/com/facebook/hermes/hermes-ios/250829098.0.17/hermes-ios-250829098.0.17-hermes-ios-debug.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   5786      0 --:--:-- --:--:-- --:--:--  5964
-100 31.2M  100 31.2M    0     0   118M      0 --:--:-- --:--:-- --:--:--  118M
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   3440      0 --:--:-- --:--:-- --:--:--  3408
+100 31.2M  100 31.2M    0     0  77.1M      0 --:--:-- --:--:-- --:--:-- 77.1M
 [Hermes] Verifying checksum for downloaded hermes-ios-250829098.0.17-debug.tar.gz...
 [Hermes] SHA1 verified for hermes-ios-250829098.0.17-debug.tar.gz
 [Hermes] Saved hermes-ios-250829098.0.17-debug.tar.gz to shared cache (/Users/runner/Library/Caches/ReactNative)
 [Hermes] Cache miss: downloading hermes-ios-250829098.0.17-release.tar.gz from https://repo1.maven.org/maven2/com/facebook/hermes/hermes-ios/250829098.0.17/hermes-ios-250829098.0.17-hermes-ios-release.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   5238      0 --:--:-- --:--:-- --:--:--  5387
- 69 24.3M   69 16.8M    0     0  83.2M      0 --:--:-- --:--:-- --:--:-- 83.2M100 24.3M  100 24.3M    0     0  98.5M      0 --:--:-- --:--:-- --:--:--  171M
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   3584      0 --:--:-- --:--:-- --:--:--  3630
+100 24.3M  100 24.3M    0     0  68.8M      0 --:--:-- --:--:-- --:--:-- 68.8M
 [Hermes] Verifying checksum for downloaded hermes-ios-250829098.0.17-release.tar.gz...
 [Hermes] SHA1 verified for hermes-ios-250829098.0.17-release.tar.gz
 [Hermes] Saved hermes-ios-250829098.0.17-release.tar.gz to shared cache (/Users/runner/Library/Caches/ReactNative)
@@ -342,7 +342,7 @@ solutions to build the project.
 `yarn ios`
 =============================================================
 
-Pod install took 64 [s] to run
+Pod install took 86 [s] to run
 Integrating client project
 
 [!] Please close any current Xcode sessions and use `Multica.xcworkspace` for this project from now on.

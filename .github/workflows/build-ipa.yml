@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-ipa:
-    runs-on: macos-26 # Xcode 26.x：RN 0.86 要求 >=16.1；ExpoModulesJSI xcframework 要求 Swift tools 6.2（Xcode 16.4 只有 6.1）
+    runs-on: macos-26 # Xcode 26.x：RN 0.86 要求 >=16.1；ExpoModulesJSI xcframework 要求 Swift tools 6.2
     timeout-minutes: 120
     permissions:
       contents: write # 失败时把诊断日志 commit 回仓库，便于外部读取
@@ -26,6 +26,13 @@ jobs:
 
       - name: Prep diagnostics dir
         run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
+
+      - name: Pin Xcode
+        run: |
+          set +e
+          sudo xcode-select -s /Applications/Xcode_26.app || sudo xcode-select -s /Applications/Xcode_26.0.app || true
+          xcodebuild -version
+          xcrun simctl list runtimes | head -5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -40,6 +47,30 @@ jobs:
 
       - name: Install dependencies (workspace root)
         run: pnpm install
+
+      - name: Lower Expo minimal iOS deployment target check
+        # 目标设备 iOS 16.2 低于 SDK 57 官方基线 16.4。
+        # 只改 expo-build-properties 里的"最低版本常量"（16.4 -> 16.0），
+        # 不改任何校验逻辑/其它字段，范围可控。
+        run: |
+          set +e
+          F=$(find "$GITHUB_WORKSPACE/node_modules/.pnpm" -path "*expo-build-properties*/build/pluginConfig.js" | head -1)
+          if [ -z "$F" ]; then
+            F=$(find "$GITHUB_WORKSPACE" -path "*expo-build-properties*/build/pluginConfig.js" -not -path "*/ci-diagnostics/*" | head -1)
+          fi
+          echo "plugin file: $F"
+          echo "$F" > "$GITHUB_WORKSPACE/ci-diagnostics/patched-file.txt"
+          if [ -z "$F" ]; then
+            echo "::error title=patch-target-not-found::expo-build-properties pluginConfig.js not found"
+            exit 1
+          fi
+          perl -pi -e "s/deploymentTarget: '16\.4',/deploymentTarget: '16.0',/" "$F"
+          grep -n "deploymentTarget: '" "$F" | head -3
+          if ! grep -q "deploymentTarget: '16.0'," "$F"; then
+            echo "::error title=patch-failed::constant 16.4 not replaced"
+            exit 1
+          fi
+          echo "patched OK"
 
       - name: Prebuild iOS project (generate native project only)
         env:
@@ -58,7 +89,8 @@ jobs:
           pnpm exec expo prebuild -p ios --no-install > "$LOG" 2>&1
           code=$?
           cat "$LOG"
-          ls -la ios 2>/dev/null | head -20
+          echo "== Podfile =="
+          head -20 ios/Podfile 2>/dev/null
           echo "prebuild exit=$code"
           if [ "$code" -ne 0 ]; then
             ERR=$(grep -nEi 'error|invalid|must be|requires|minimum|supported' "$LOG" | tail -20 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
@@ -73,13 +105,6 @@ jobs:
             exit "$code"
           fi
           exit 0
-
-      - name: Install native build tools
-        run: |
-          set +e
-          brew install cmake ninja || brew upgrade cmake ninja || true
-          cmake --version || true
-          ninja --version || true
 
       - name: Install CocoaPods dependencies (with diagnostics)
         id: pods
@@ -97,21 +122,11 @@ jobs:
             xcodebuild -version
             echo "== ios dir =="
             ls -la
-            echo "== Podfile =="
-            head -40 Podfile 2>/dev/null
-            echo "== pod install attempt 1 =="
+            echo "== pod install =="
             pod install
-            echo "attempt1 exit=$?"
-            echo "== Pods dir after attempt 1 =="
-            ls Pods 2>/dev/null | head -10
+            echo "pod install exit=$?"
+            ls Pods 2>/dev/null | head -5
           } > "$LOG" 2>&1
-          if [ ! -d Pods ]; then
-            {
-              echo "== pod install attempt 2 (--repo-update) =="
-              pod install --repo-update
-              echo "attempt2 exit=$?"
-            } >> "$LOG" 2>&1
-          fi
           cat "$LOG"
           if [ -d Pods ]; then
             echo "pods OK"
@@ -153,9 +168,8 @@ jobs:
           RAW=$(xcodebuild -list -workspace "$WORKSPACE" 2>/dev/null)
           SCHEMES=$(echo "$RAW" | awk '/Schemes:/{f=1;next} f && NF {gsub(/^[ \t]+/,""); if ($0 != "") print $0}' | tr '\n' ',')
           SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | grep -i 'multica' | head -1)
-          [ -z "$SCHEME" ] && SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | head -1)
           [ -z "$SCHEME" ] && SCHEME=$(basename "$WORKSPACE" .xcworkspace)
-          echo "WORKSPACE=$WORKSPACE SCHEMES=$SCHEMES SCHEME=$SCHEME"
+          echo "WORKSPACE=$WORKSPACE SCHEME=$SCHEME"
           echo "::notice title=detected::workspace=$WORKSPACE schemes=$SCHEMES scheme=$SCHEME"
           {
             xcodebuild \
@@ -170,9 +184,9 @@ jobs:
               build
             echo "xcodebuild exit=$?"
           } > "$LOG" 2>&1
-          tail -60 "$LOG"
+          tail -40 "$LOG"
           if ! grep -q "xcodebuild exit=0" "$LOG"; then
-            ERR=$(grep -nEi 'error:|fatal|failed|exception|not found|no such|cannot|unable to|exit=|BUILD' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
+            ERR=$(grep -nEi 'error:|fatal|failed|not found|no such|cannot|unable to|exit=|BUILD' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
             echo "::error title=xcode-error-lines::$ERR"
             LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
             echo "::error title=xcode-last-lines::$LAST"
@@ -185,6 +199,9 @@ jobs:
             echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-400)"
             exit 1
           fi
+          # 记录是否有"仅更高版本可用"的 API 被使用（运行期崩溃风险信号）
+          grep -iE "is only available in iOS|only available on iOS" "$LOG" | sort -u | head -20 > "$GITHUB_WORKSPACE/ci-diagnostics/availability-warnings.txt" || true
+          echo "::notice title=availability-warnings-count::$(wc -l < "$GITHUB_WORKSPACE/ci-diagnostics/availability-warnings.txt")"
           exit 0
 
       - name: Upload xcodebuild diagnostics
@@ -207,6 +224,7 @@ jobs:
           cd build
           zip -qr Multica-unsigned.ipa Payload
           ls -lh Multica-unsigned.ipa
+          /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$APP_PATH/Info.plist" || true
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4

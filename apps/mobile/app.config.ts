@@ -90,6 +90,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             // SDK 57's supported scene runtime is required for Xcode 27 builds.
             // Keep this in prebuild config so clean native generations retain it.
             enableSceneSupport: true,
+            // 目标设备 iOS 16.2。SDK 57 官方基线是 16.4，CI 里已把
+            // expo-build-properties 的最低版本常量从 16.4 改为 16.0 以放行。
+            deploymentTarget: "16.2",
           },
         },
       ],

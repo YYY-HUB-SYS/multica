@@ -58,17 +58,24 @@ jobs:
           [ "$code" -ne 0 ] && exit "$code"
           exit 0
 
+      - name: Install native build tools
+        run: |
+          set +e
+          brew install cmake ninja || brew upgrade cmake ninja || true
+          cmake --version || true
+          ninja --version || true
+
       - name: Prep diagnostics dir
         run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
 
       - name: Install CocoaPods dependencies (with diagnostics)
         id: pods
         env:
-          LOG_NAME: pod-install.log
+          LOG_NAME: pod-install.txt
         run: |
           set +e   # 关闭 bash -e，否则失败会直接中止，诊断代码永远执行不到
           cd apps/mobile/ios
-          LOG="$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log"
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/pod-install.txt"
           {
             echo "== versions =="
             node -v
@@ -121,11 +128,11 @@ jobs:
 
       - name: Build unsigned .app (Release)
         env:
-          LOG_NAME: xcodebuild.log
+          LOG_NAME: xcodebuild.txt
         run: |
           set +e
           cd apps/mobile/ios
-          LOG="$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log"
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.txt"
           WORKSPACE=$(ls -d *.xcworkspace 2>/dev/null | head -1)
           if [ -z "$WORKSPACE" ]; then
             echo "::error title=workspace-not-found::ios dir listing: $(ls | tr '\n' '|' | cut -c1-600)"

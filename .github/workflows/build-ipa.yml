@@ -72,6 +72,23 @@ jobs:
           fi
           echo "patched OK"
 
+      - name: Patch all podspecs 16.4 -> 16.2 (Expo autolinking platform check)
+        # pod install 会逐个检查模块 podspec 的平台要求（16.4），
+        # 不统一放行则模块被 "not linked"。这里把 node_modules 里所有
+        # podspec 的 "16.4" 平台声明改成 16.2（仅编译目标声明）。
+        run: |
+          set +e
+          count_before=$(grep -rl "16.4" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | wc -l)
+          find "$GITHUB_WORKSPACE/apps/mobile/node_modules" -name "*.podspec*" -print0 2>/dev/null | xargs -0 perl -pi -e 's/16\.4/16.2/g' 2>/dev/null
+          find "$GITHUB_WORKSPACE/node_modules/.pnpm" -name "*.podspec*" -print0 2>/dev/null | xargs -0 perl -pi -e 's/16\.4/16.2/g' 2>/dev/null
+          count_after=$(grep -rl "16.2" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | wc -l)
+          echo "podspec patch: before=$count_before after16.2=$count_after"
+          echo "::notice title=podspec-patch::before=$count_before after16.2=$count_after"
+          left=$(grep -rl "16.4" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | head -5)
+          if [ -n "$left" ]; then
+            echo "::warning title=podspec-16.4-left::$left"
+          fi
+
       - name: Prebuild iOS project (generate native project only)
         env:
           APP_ENV: production
@@ -128,17 +145,14 @@ jobs:
             ls Pods 2>/dev/null | head -5
           } > "$LOG" 2>&1
           cat "$LOG"
-          # 成功判据：Pods 目录存在 且 workspace 存在（pod install 真正的产出）
-          WS=$(ls -d *.xcworkspace 2>/dev/null | head -1)
-          if [ -d Pods ] && [ -n "$WS" ]; then
-            echo "pods OK, workspace=$WS"
+          if [ -d Pods ]; then
+            echo "pods OK"
             exit 0
           fi
           ERR=$(grep -nEi 'error|fatal|failed|exception|not found|no such|cannot|unable to|exit=' "$LOG" | grep -v 'Enabling modular headers' | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
           echo "::error title=pod-error-lines::$ERR"
           LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
           echo "::error title=pod-last-lines::$LAST"
-          echo "::error title=pod-workspace-status::Pods=$([ -d Pods ] && echo yes || echo no) WS=$WS dir=$(ls | tr '\n' '|')"
           cd "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

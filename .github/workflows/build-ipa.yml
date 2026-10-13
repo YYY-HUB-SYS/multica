@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-ipa:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 120
     permissions:
       contents: write # 失败时把诊断日志 commit 回仓库，便于外部读取

@@ -49,6 +49,9 @@ jobs:
             sudo xcodebuild -downloadPlatform iOS || echo "download failed"
             xcode-select -p
           fi
+          # 即使有 SDK 也补一次 platform 组件（destination 类检查需要它；archive 路线不依赖）
+          echo "== ensure iOS platform component =="
+          timeout 300 sudo xcodebuild -downloadPlatform iOS 2>&1 | tail -3 || echo "downloadPlatform skipped/failed (ok for archive route)"
           xcodebuild -version
           echo "== iphoneos SDK =="
           xcrun --sdk iphoneos --show-sdk-path || echo "SDK_MISSING"
@@ -217,19 +220,21 @@ jobs:
             exit 1
           fi
           {
-            # 注意：不用 -destination 'generic/platform=iOS'——镜像漂移时 iOS platform
-            # 组件可能缺失，destination 匹配会直接报 "iOS 26.0 is not installed"。
-            # -sdk iphoneos 是经典 CI 打包写法，只依赖 SDK 目录。
+            # 镜像漂移导致 iOS platform 组件缺失时：
+            #  -destination 'generic/platform=iOS' -> "iOS 26.0 is not installed"
+            #  build + -sdk iphoneos            -> "Found no destinations"
+            # archive action 本身就是 generic device 语义，不走 destination 匹配，
+            # 是这类镜像上唯一可靠的编译入口。产物在 ../build/Multica.xcarchive。
             xcodebuild \
               -workspace "$WORKSPACE" \
               -scheme "$SCHEME" \
               -configuration Release \
               -sdk iphoneos \
-              -derivedDataPath ../build/DerivedData \
+              -archivePath ../build/Multica.xcarchive \
               CODE_SIGNING_ALLOWED=NO \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGN_IDENTITY="" \
-              build
+              archive
             echo "xcodebuild exit=$?"
           } > "$LOG" 2>&1
           tail -40 "$LOG"
@@ -264,15 +269,23 @@ jobs:
         run: |
           set +e
           cd apps/mobile
-          APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d | head -1)
+          # archive 路线的产物在 xcarchive 里；build 路线在 DerivedData 里。两者都找。
+          APP_PATH=$(ls -d build/Multica.xcarchive/Products/Applications/*.app 2>/dev/null | head -1)
+          if [ -z "$APP_PATH" ]; then
+            APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d 2>/dev/null | head -1)
+          fi
           echo "APP_PATH=$APP_PATH"
+          if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
+            echo "::error title=no-app-found::xcarchive/DerivedData both empty. build dir: $(ls build 2>/dev/null | tr '\n' '|')"
+            exit 1
+          fi
           mkdir -p build/Payload
           rm -rf build/Payload/*.app
           cp -R "$APP_PATH" build/Payload/
           cd build
           zip -qr Multica-unsigned.ipa Payload
           ls -lh Multica-unsigned.ipa
-          /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$APP_PATH/Info.plist" || true
+          /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "../$APP_PATH/Info.plist" || true
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4

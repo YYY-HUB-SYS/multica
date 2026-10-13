@@ -217,12 +217,15 @@ jobs:
             exit 1
           fi
           {
+            # 注意：不用 -destination 'generic/platform=iOS'——镜像漂移时 iOS platform
+            # 组件可能缺失，destination 匹配会直接报 "iOS 26.0 is not installed"。
+            # -sdk iphoneos 是经典 CI 打包写法，只依赖 SDK 目录。
             xcodebuild \
               -workspace "$WORKSPACE" \
               -scheme "$SCHEME" \
               -configuration Release \
+              -sdk iphoneos \
               -derivedDataPath ../build/DerivedData \
-              -destination 'generic/platform=iOS' \
               CODE_SIGNING_ALLOWED=NO \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGN_IDENTITY="" \

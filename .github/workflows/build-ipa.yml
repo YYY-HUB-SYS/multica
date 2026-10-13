@@ -1,7 +1,7 @@
 name: Build Multica iOS IPA (unsigned)
 
 on:
-  workflow_dispatch:    # 手动触发
+  workflow_dispatch: # 手动触发
   push:
     branches: [main]
     paths:
@@ -16,7 +16,6 @@ jobs:
   build-ipa:
     runs-on: macos-14
     timeout-minutes: 120
-
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -37,7 +36,7 @@ jobs:
       - name: Install dependencies (workspace root)
         run: pnpm install
 
-      - name: Prebuild iOS project
+      - name: Prebuild iOS project (with pod install)
         env:
           APP_ENV: production
           EXPO_BUNDLE_IDENTIFIER_PROD: com.yourname.multica
@@ -47,13 +46,26 @@ jobs:
           if [ ! -f .env.production.local ]; then
             cp .env.production.example .env.production.local 2>/dev/null || true
           fi
-          pnpm exec expo prebuild -p ios --no-install
+          # 关键修复：不加 --no-install，让 prebuild 自动完成 node_modules 关联 + pod install
+          pnpm exec expo prebuild -p ios
+
+      - name: Ensure CocoaPods dependencies
+        run: |
+          cd apps/mobile/ios
+          if [ ! -d Pods ]; then
+            echo "Pods missing, running pod install manually..."
+            pod install --repo-update
+          else
+            echo "Pods directory present."
+          fi
+          ls -la
 
       - name: Build unsigned .app (Release)
         run: |
           cd apps/mobile/ios
+          # 诊断：列出可用 scheme，便于失败时定位
+          xcodebuild -list -workspace multica.xcworkspace || true
           # 用 xcodebuild 构建 Release，关闭签名 -> 产出未签名 .app
-          # scheme 来自 app.config.ts 的 scheme: "multica"（小写）
           xcodebuild \
             -workspace multica.xcworkspace \
             -scheme multica \

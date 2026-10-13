@@ -1,0 +1,82 @@
+name: Build Multica iOS IPA (unsigned)
+
+on:
+  workflow_dispatch:    # 手动触发
+  push:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+      - '.github/workflows/build-ipa.yml'
+
+concurrency:
+  group: ipa-build
+  cancel-in-progress: true
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Install dependencies
+        run: |
+          cd apps/mobile
+          pnpm install --no-frozen-lockfile
+
+      - name: Prebuild iOS project
+        env:
+          APP_ENV: production
+          EXPO_BUNDLE_IDENTIFIER_PROD: com.yourname.multica
+        run: |
+          cd apps/mobile
+          # 生产环境变量（云后端 multica.ai）
+          if [ ! -f .env.production.local ]; then cp .env.production.example .env.production.local 2>/dev/null || true; fi
+          pnpm exec expo prebuild -p ios --no-install
+
+      - name: Build unsigned .app (Release)
+        run: |
+          cd apps/mobile/ios
+          # 用 xcodebuild 构建 Release，关闭签名 -> 产出未签名 .app
+          xcodebuild \
+            -workspace Multica.xcworkspace \
+            -scheme Multica \
+            -configuration Release \
+            -derivedDataPath ../build/DerivedData \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package unsigned .ipa
+        run: |
+          cd apps/mobile
+          APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d | head -1)
+          echo "APP_PATH=$APP_PATH"
+          mkdir -p build/Payload
+          cp -R "$APP_PATH" build/Payload/
+          cd build
+          zip -qr Multica-unsigned.ipa Payload
+          ls -lh Multica-unsigned.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Multica-unsigned-ipa
+          path: apps/mobile/build/Multica-unsigned.ipa
+          if-no-files-found: error

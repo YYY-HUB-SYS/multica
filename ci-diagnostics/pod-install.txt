@@ -6,22 +6,64 @@ Xcode 26.0.1
 Build version 17A400
 == ios dir ==
 total 32
-drwxr-xr-x   8 runner  staff   256 Oct 13 23:07 .
-drwxr-xr-x  35 runner  staff  1120 Oct 13 23:07 ..
--rw-r--r--   1 runner  staff   321 Oct 13 23:07 .gitignore
--rw-r--r--   1 runner  staff   482 Oct 13 23:07 .xcode.env
-drwxr-xr-x   9 runner  staff   288 Oct 13 23:07 Multica
-drwxr-xr-x   5 runner  staff   160 Oct 13 23:07 Multica.xcodeproj
--rw-r--r--   1 runner  staff  2895 Oct 13 23:07 Podfile
--rw-r--r--   1 runner  staff   466 Oct 13 23:07 Podfile.properties.json
+drwxr-xr-x   8 runner  staff   256 Oct 13 23:15 .
+drwxr-xr-x  35 runner  staff  1120 Oct 13 23:15 ..
+-rw-r--r--   1 runner  staff   321 Oct 13 23:15 .gitignore
+-rw-r--r--   1 runner  staff   482 Oct 13 23:15 .xcode.env
+drwxr-xr-x   9 runner  staff   288 Oct 13 23:15 Multica
+drwxr-xr-x   5 runner  staff   160 Oct 13 23:15 Multica.xcodeproj
+-rw-r--r--   1 runner  staff  2895 Oct 13 23:15 Podfile
+-rw-r--r--   1 runner  staff   466 Oct 13 23:15 Podfile.properties.json
 == pod install ==
 [Expo] EXPO_USE_PRECOMPILED_MODULES=1 was set, but React Native is configured to build from source (RCT_USE_PREBUILT_RNCORE is not 1). Precompiled Expo modules require the prebuilt React.xcframework, so every Expo module will be built from source for this install. To use precompiled modules, ensure `ios.buildReactNativeFromSource` is not `true` in the `expo-build-properties` plugin (the default uses the prebuilt framework), or export RCT_USE_PREBUILT_RNCORE=1 before running `pod install`.
 Using Expo modules
+[Expo] Enabling modular headers for pod ExpoModulesCore
+[Expo] Enabling modular headers for pod ExpoModulesWorklets
+[Expo] Enabling modular headers for pod React-RCTFabric
+[Expo] Enabling modular headers for pod ExpoModulesJSI
+[Expo] Enabling modular headers for pod React-RCTAppDelegate
+[Expo] Enabling modular headers for pod ReactAppDependencyProvider
+[Expo] Enabling modular headers for pod React-Core
+[Expo] Enabling modular headers for pod ReactCodegen
+[Expo] Enabling modular headers for pod RCTRequired
+[Expo] Enabling modular headers for pod RCTTypeSafety
+[Expo] Enabling modular headers for pod ReactCommon
+[Expo] Enabling modular headers for pod React-NativeModulesApple
+[Expo] Enabling modular headers for pod Yoga
+[Expo] Enabling modular headers for pod React-Fabric
+[Expo] Enabling modular headers for pod React-graphics
+[Expo] Enabling modular headers for pod React-utils
+[Expo] Enabling modular headers for pod React-featureflags
+[Expo] Enabling modular headers for pod React-debug
+[Expo] Enabling modular headers for pod React-ImageManager
+[Expo] Enabling modular headers for pod React-rendererdebug
+[Expo] Enabling modular headers for pod React-jsi
+[Expo] Enabling modular headers for pod React-renderercss
+[Expo] Enabling modular headers for pod hermes-engine
+[Expo] Enabling modular headers for pod glog
+[Expo] Enabling modular headers for pod boost
+[Expo] Enabling modular headers for pod DoubleConversion
+[Expo] Enabling modular headers for pod fast_float
+[Expo] Enabling modular headers for pod fmt
+[Expo] Enabling modular headers for pod RCT-Folly
+[Expo] Enabling modular headers for pod SocketRocket
+[Expo] Enabling modular headers for pod expo-dev-menu-interface
+[Expo] Enabling modular headers for pod EXManifests
+[Expo] Enabling modular headers for pod EXUpdatesInterface
+[Expo] Enabling modular headers for pod expo-dev-menu
+[Expo] Enabling modular headers for pod React-jsinspector
+[Expo] Enabling modular headers for pod expo-dev-launcher
+[Expo] Enabling modular headers for pod SDWebImage
+[Expo] Enabling modular headers for pod SDWebImageAVIFCoder
+[Expo] Enabling modular headers for pod SDWebImageSVGCoder
+[Expo] Enabling modular headers for pod SDWebImageWebPCoder
+[Expo] Enabling modular headers for pod libavif
+[Expo] Enabling modular headers for pod RNScreens
 [RNScreens] Gamma project enabled. Including source files.
 Found 14 modules for target `Multica`
 link_native_modules! {ios_packages: [{configurations: [], name: "@react-native-community/datetimepicker", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-community+datetimepicker@9.1.0_expo@57.0.27_react-native@0.86.3_@babel+co_6c5dcdf9ebde63cfea0eaece692280c6/node_modules/@react-native-community/datetimepicker", path: "../../../node_modules/.pnpm/@react-native-community+datetimepicker@9.1.0_expo@57.0.27_react-native@0.86.3_@babel+co_6c5dcdf9ebde63cfea0eaece692280c6/node_modules/@react-native-community/datetimepicker", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-community+datetimepicker@9.1.0_expo@57.0.27_react-native@0.86.3_@babel+co_6c5dcdf9ebde63cfea0eaece692280c6/node_modules/@react-native-community/datetimepicker/RNDateTimePicker.podspec", script_phases: []}, {configurations: [], name: "@react-native-community/netinfo", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-community+netinfo@12.0.1_react-native@0.86.3_@babel+core@7.29.0_@react-na_d2e30ad70bfd71eb92829235cdfd5709/node_modules/@react-native-community/netinfo", path: "../../../node_modules/.pnpm/@react-native-community+netinfo@12.0.1_react-native@0.86.3_@babel+core@7.29.0_@react-na_d2e30ad70bfd71eb92829235cdfd5709/node_modules/@react-native-community/netinfo", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-community+netinfo@12.0.1_react-native@0.86.3_@babel+core@7.29.0_@react-na_d2e30ad70bfd71eb92829235cdfd5709/node_modules/@react-native-community/netinfo/react-native-netinfo.podspec", script_phases: []}, {configurations: [], name: "@react-native-masked-view/masked-view", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-masked-view+masked-view@0.3.2_react-native@0.86.3_@babel+core@7.29.0_@rea_4f1c572a365ca25f9da5ccb3198d8223/node_modules/@react-native-masked-view/masked-view", path: "../../../node_modules/.pnpm/@react-native-masked-view+masked-view@0.3.2_react-native@0.86.3_@babel+core@7.29.0_@rea_4f1c572a365ca25f9da5ccb3198d8223/node_modules/@react-native-masked-view/masked-view", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-masked-view+masked-view@0.3.2_react-native@0.86.3_@babel+core@7.29.0_@rea_4f1c572a365ca25f9da5ccb3198d8223/node_modules/@react-native-masked-view/masked-view/RNCMaskedView.podspec", script_phases: []}, {configurations: [], name: "@react-native-segmented-control/segmented-control", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-segmented-control+segmented-control@2.5.7_react-native@0.86.3_@babel+core_c66ec5e974bda73053d4e86fc997adbf/node_modules/@react-native-segmented-control/segmented-control", path: "../../../node_modules/.pnpm/@react-native-segmented-control+segmented-control@2.5.7_react-native@0.86.3_@babel+core_c66ec5e974bda73053d4e86fc997adbf/node_modules/@react-native-segmented-control/segmented-control", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/@react-native-segmented-control+segmented-control@2.5.7_react-native@0.86.3_@babel+core_c66ec5e974bda73053d4e86fc997adbf/node_modules/@react-native-segmented-control/segmented-control/react-native-segmented-control.podspec", script_phases: []}, {configurations: [], name: "expo", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/expo@57.0.27_@babel+core@7.29.0_@expo+dom-webview@57.0.1_@expo+metro-runtime@57.0.16_ex_a25670081ab9258067dba17c52471808/node_modules/expo", path: "../../../node_modules/.pnpm/expo@57.0.27_@babel+core@7.29.0_@expo+dom-webview@57.0.1_@expo+metro-runtime@57.0.16_ex_a25670081ab9258067dba17c52471808/node_modules/expo", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/expo@57.0.27_@babel+core@7.29.0_@expo+dom-webview@57.0.1_@expo+metro-runtime@57.0.16_ex_a25670081ab9258067dba17c52471808/node_modules/expo/Expo.podspec", script_phases: []}, {configurations: [], name: "react-native-enriched-markdown", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-enriched-markdown@0.6.0_@expo+config-plugins@57.0.10_typescript@5.9.3__kat_435f97ad77d9b8f5ba1c948c9cb68acd/node_modules/react-native-enriched-markdown", path: "../../../node_modules/.pnpm/react-native-enriched-markdown@0.6.0_@expo+config-plugins@57.0.10_typescript@5.9.3__kat_435f97ad77d9b8f5ba1c948c9cb68acd/node_modules/react-native-enriched-markdown", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-enriched-markdown@0.6.0_@expo+config-plugins@57.0.10_typescript@5.9.3__kat_435f97ad77d9b8f5ba1c948c9cb68acd/node_modules/react-native-enriched-markdown/ReactNativeEnrichedMarkdown.podspec", script_phases: []}, {configurations: [], name: "react-native-gesture-handler", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-gesture-handler@2.32.0_react-native@0.86.3_@babel+core@7.29.0_@react-nativ_856dea9147c7395dd972ee2a45778162/node_modules/react-native-gesture-handler", path: "../../../node_modules/.pnpm/react-native-gesture-handler@2.32.0_react-native@0.86.3_@babel+core@7.29.0_@react-nativ_856dea9147c7395dd972ee2a45778162/node_modules/react-native-gesture-handler", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-gesture-handler@2.32.0_react-native@0.86.3_@babel+core@7.29.0_@react-nativ_856dea9147c7395dd972ee2a45778162/node_modules/react-native-gesture-handler/RNGestureHandler.podspec", script_phases: []}, {configurations: [], name: "react-native-keyboard-controller", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-keyboard-controller@1.21.9_react-native-reanimated@4.5.1_react-native-work_6721fdd96caf4b952ede06b52f4f8473/node_modules/react-native-keyboard-controller", path: "../../../node_modules/.pnpm/react-native-keyboard-controller@1.21.9_react-native-reanimated@4.5.1_react-native-work_6721fdd96caf4b952ede06b52f4f8473/node_modules/react-native-keyboard-controller", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-keyboard-controller@1.21.9_react-native-reanimated@4.5.1_react-native-work_6721fdd96caf4b952ede06b52f4f8473/node_modules/react-native-keyboard-controller/react-native-keyboard-controller.podspec", script_phases: []}, {configurations: [], name: "react-native-reanimated", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-reanimated@4.5.1_react-native-worklets@0.10.1_@babel+core@7.29.0_@react-na_56fc0c50ad9bcfa773df8153e9e87eca/node_modules/react-native-reanimated", path: "../../../node_modules/.pnpm/react-native-reanimated@4.5.1_react-native-worklets@0.10.1_@babel+core@7.29.0_@react-na_56fc0c50ad9bcfa773df8153e9e87eca/node_modules/react-native-reanimated", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-reanimated@4.5.1_react-native-worklets@0.10.1_@babel+core@7.29.0_@react-na_56fc0c50ad9bcfa773df8153e9e87eca/node_modules/react-native-reanimated/RNReanimated.podspec", script_phases: []}, {configurations: [], name: "react-native-safe-area-context", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-safe-area-context@5.7.0_react-native@0.86.3_@babel+core@7.29.0_@react-nati_26a55a69ed54b387fdc719a7d1b6e51d/node_modules/react-native-safe-area-context", path: "../../../node_modules/.pnpm/react-native-safe-area-context@5.7.0_react-native@0.86.3_@babel+core@7.29.0_@react-nati_26a55a69ed54b387fdc719a7d1b6e51d/node_modules/react-native-safe-area-context", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-safe-area-context@5.7.0_react-native@0.86.3_@babel+core@7.29.0_@react-nati_26a55a69ed54b387fdc719a7d1b6e51d/node_modules/react-native-safe-area-context/react-native-safe-area-context.podspec", script_phases: []}, {configurations: [], name: "react-native-screens", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-screens@4.26.2_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-_da9022550d3bce8bdd56affdf2ec34b8/node_modules/react-native-screens", path: "../../../node_modules/.pnpm/react-native-screens@4.26.2_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-_da9022550d3bce8bdd56affdf2ec34b8/node_modules/react-native-screens", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-screens@4.26.2_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-_da9022550d3bce8bdd56affdf2ec34b8/node_modules/react-native-screens/RNScreens.podspec", script_phases: []}, {configurations: [], name: "react-native-shiki-engine", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-shiki-engine@0.3.10_react-native@0.86.3_@babel+core@7.29.0_@react-native+m_329f9957d7890ad061ab4dd0cae65df6/node_modules/react-native-shiki-engine", path: "../../../node_modules/.pnpm/react-native-shiki-engine@0.3.10_react-native@0.86.3_@babel+core@7.29.0_@react-native+m_329f9957d7890ad061ab4dd0cae65df6/node_modules/react-native-shiki-engine", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-shiki-engine@0.3.10_react-native@0.86.3_@babel+core@7.29.0_@react-native+m_329f9957d7890ad061ab4dd0cae65df6/node_modules/react-native-shiki-engine/react-native-shiki-engine.podspec", script_phases: []}, {configurations: [], name: "react-native-svg", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-svg@15.15.4_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-con_f55415d441d7bf1e16c3844f3c583e50/node_modules/react-native-svg", path: "../../../node_modules/.pnpm/react-native-svg@15.15.4_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-con_f55415d441d7bf1e16c3844f3c583e50/node_modules/react-native-svg", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-svg@15.15.4_react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-con_f55415d441d7bf1e16c3844f3c583e50/node_modules/react-native-svg/RNSVG.podspec", script_phases: []}, {configurations: [], name: "react-native-worklets", root: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-worklets@0.10.1_@babel+core@7.29.0_@react-native+metro-config@0.86.3_@babe_0b9a306b23b83f61e60d617333cccf76/node_modules/react-native-worklets", path: "../../../node_modules/.pnpm/react-native-worklets@0.10.1_@babel+core@7.29.0_@react-native+metro-config@0.86.3_@babe_0b9a306b23b83f61e60d617333cccf76/node_modules/react-native-worklets", podspec_path: "/Users/runner/work/multica/multica/node_modules/.pnpm/react-native-worklets@0.10.1_@babel+core@7.29.0_@react-native+metro-config@0.86.3_@babe_0b9a306b23b83f61e60d617333cccf76/node_modules/react-native-worklets/RNWorklets.podspec", script_phases: []}], ios_project_root_path: "/Users/runner/work/multica/multica/apps/mobile/ios", react_native_path: "../../../node_modules/.pnpm/react-native@0.86.3_@babel+core@7.29.0_@react-native+metro-config@0.86.3_@babel+core@7._fd36e1745f2fe7d74d32fd8bf4208ce8/node_modules/react-native"}
 [RNScreens] Gamma project enabled. Including source files.
-Auto-linking React Native modules for target `Multica`: Expo, RNCMaskedView, RNDateTimePicker, RNGestureHandler, RNReanimated, RNSVG, RNScreens, RNWorklets, ReactNativeEnrichedMarkdown, react-native-keyboard-controller, react-native-netinfo, react-native-safe-area-context, react-native-segmented-control, and react-native-shiki-engine
+Auto-linking React Native modules for target `Multica`: RNCMaskedView, RNDateTimePicker, RNGestureHandler, RNReanimated, RNSVG, RNScreens, RNWorklets, ReactNativeEnrichedMarkdown, react-native-keyboard-controller, react-native-netinfo, react-native-safe-area-context, react-native-segmented-control, and react-native-shiki-engine
 Framework build type is static library
 [ReactNativeDependencies] Setting up ReactNativeDependencies...
 [ReactNativeDependencies] No prebuilt artifacts found, reverting to building from source.
@@ -128,89 +170,190 @@ Fetching podspec for `hermes-engine` from `../../../node_modules/.pnpm/react-nat
 [Hermes] Cache miss: downloading hermes-ios-250829098.0.17-debug.tar.gz from https://repo1.maven.org/maven2/com/facebook/hermes/hermes-ios/250829098.0.17/hermes-ios-250829098.0.17-hermes-ios-debug.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   3889      0 --:--:-- --:--:-- --:--:--  3976
-100 31.2M  100 31.2M    0     0  65.7M      0 --:--:-- --:--:-- --:--:-- 65.7M
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   3120      0 --:--:-- --:--:-- --:--:--  3150
+100 31.2M  100 31.2M    0     0  95.2M      0 --:--:-- --:--:-- --:--:-- 95.2M
 [Hermes] Verifying checksum for downloaded hermes-ios-250829098.0.17-debug.tar.gz...
 [Hermes] SHA1 verified for hermes-ios-250829098.0.17-debug.tar.gz
 [Hermes] Saved hermes-ios-250829098.0.17-debug.tar.gz to shared cache (/Users/runner/Library/Caches/ReactNative)
 [Hermes] Cache miss: downloading hermes-ios-250829098.0.17-release.tar.gz from https://repo1.maven.org/maven2/com/facebook/hermes/hermes-ios/250829098.0.17/hermes-ios-250829098.0.17-hermes-ios-release.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   4215      0 --:--:-- --:--:-- --:--:--  4282
-100 24.3M  100 24.3M    0     0  62.8M      0 --:--:-- --:--:-- --:--:-- 62.8M
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   167    0   167    0     0   3941      0 --:--:-- --:--:-- --:--:--  3976
+ 30 24.3M   30 7557k    0     0  35.8M      0 --:--:-- --:--:-- --:--:-- 35.8M100 24.3M  100 24.3M    0     0  57.3M      0 --:--:-- --:--:-- --:--:-- 77.5M
 [Hermes] Verifying checksum for downloaded hermes-ios-250829098.0.17-release.tar.gz...
 [Hermes] SHA1 verified for hermes-ios-250829098.0.17-release.tar.gz
 [Hermes] Saved hermes-ios-250829098.0.17-release.tar.gz to shared cache (/Users/runner/Library/Caches/ReactNative)
 Adding spec repo `trunk` with CDN `https://cdn.cocoapods.org/`
-[!] CocoaPods could not find compatible versions for pod "Expo":
-  In Podfile:
-    Expo (from `../../../node_modules/.pnpm/expo@57.0.27_@babel+core@7.29.0_@expo+dom-webview@57.0.1_@expo+metro-runtime@57.0.16_ex_a25670081ab9258067dba17c52471808/node_modules/expo`)
+Downloading dependencies
+Installing DoubleConversion (1.1.6)
+Installing EXConstants (57.0.21)
+Installing EXJSONUtils (57.0.2)
+Installing EXManifests (57.0.2)
+Installing EXUpdatesInterface (57.0.2)
+Installing Expo (57.0.27)
+Installing ExpoAsset (57.0.19)
+Installing ExpoClipboard (57.0.2)
+Installing ExpoDocumentPicker (57.0.3)
+Installing ExpoDomWebView (57.0.1)
+Installing ExpoFileSystem (57.0.7)
+Installing ExpoFont (57.0.4)
+Installing ExpoGlassEffect (57.0.4)
+Installing ExpoHaptics (57.0.3)
+Installing ExpoImage (57.0.5)
+Installing ExpoImagePicker (57.0.20)
+Installing ExpoKeepAwake (57.0.2)
+Installing ExpoLinking (57.0.12)
+Installing ExpoLocalization (57.0.2)
+Installing ExpoLogBox (57.0.4)
+Installing ExpoModulesCore (57.0.21)
+Installing ExpoModulesJSI (57.1.1)
+Installing ExpoModulesWorklets (57.0.21)
+Installing ExpoModulesWorkletsAdapter (57.0.21)
+Installing ExpoRouter (57.0.25)
+Installing ExpoSecureStore (57.0.4)
+Installing ExpoSymbols (57.0.3)
+Installing ExpoSystemUI (57.0.4)
+Installing ExpoUI (57.0.22)
+Installing FBLazyVector (0.86.3)
+Installing RCT-Folly (2024.11.18.00)
+Installing RCTDeprecation (0.86.3)
+Installing RCTRequired (0.86.3)
+Installing RCTSwiftUI (0.86.3)
+Installing RCTSwiftUIWrapper (0.86.3)
+Installing RCTTypeSafety (0.86.3)
+Installing RNCMaskedView (0.3.2)
+Installing RNDateTimePicker (9.1.0)
+Installing RNGestureHandler (2.32.0)
+Installing RNReanimated (4.5.1)
+Installing RNSVG (15.15.4)
+Installing RNScreens (4.26.2)
+Installing RNWorklets (0.10.1)
+Installing React (0.86.3)
+Installing React-Codegen (0.1.0)
+Installing React-Core (0.86.3)
+Installing React-CoreModules (0.86.3)
+Installing React-Fabric (0.86.3)
+Installing React-FabricComponents (0.86.3)
+Installing React-FabricImage (0.86.3)
+Installing React-ImageManager (0.86.3)
+Installing React-Mapbuffer (0.86.3)
+Installing React-NativeModulesApple (0.86.3)
+Installing React-RCTActionSheet (0.86.3)
+Installing React-RCTAnimation (0.86.3)
+Installing React-RCTAppDelegate (0.86.3)
+Installing React-RCTBlob (0.86.3)
+Installing React-RCTFBReactNativeSpec (0.86.3)
+Installing React-RCTFabric (0.86.3)
+Installing React-RCTImage (0.86.3)
+Installing React-RCTLinking (0.86.3)
+Installing React-RCTNetwork (0.86.3)
+Installing React-RCTRuntime (0.86.3)
+Installing React-RCTSettings (0.86.3)
+Installing React-RCTText (0.86.3)
+Installing React-RCTVibration (0.86.3)
+Installing React-RuntimeApple (0.86.3)
+Installing React-RuntimeCore (0.86.3)
+Installing React-RuntimeHermes (0.86.3)
+Installing React-callinvoker (0.86.3)
+Installing React-cxxreact (0.86.3)
+Installing React-debug (0.86.3)
+Installing React-defaultsnativemodule (0.86.3)
+Installing React-domnativemodule (0.86.3)
+Installing React-featureflags (0.86.3)
+Installing React-featureflagsnativemodule (0.86.3)
+Installing React-graphics (0.86.3)
+Installing React-hermes (0.86.3)
+Installing React-idlecallbacksnativemodule (0.86.3)
+Installing React-intersectionobservernativemodule (0.86.3)
+Installing React-jserrorhandler (0.86.3)
+Installing React-jsi (0.86.3)
+Installing React-jsiexecutor (0.86.3)
+Installing React-jsinspector (0.86.3)
+Installing React-jsinspectorcdp (0.86.3)
+Installing React-jsinspectornetwork (0.86.3)
+Installing React-jsinspectortracing (0.86.3)
+Installing React-jsitooling (0.86.3)
+Installing React-jsitracing (0.86.3)
+Installing React-logger (0.86.3)
+Installing React-microtasksnativemodule (0.86.3)
+Installing React-mutationobservernativemodule (0.86.3)
+Installing React-networking (0.86.3)
+Installing React-oscompat (0.86.3)
+Installing React-perflogger (0.86.3)
+Installing React-performancecdpmetrics (0.86.3)
+Installing React-performancetimeline (0.86.3)
+Installing React-rendererconsistency (0.86.3)
+Installing React-renderercss (0.86.3)
+Installing React-rendererdebug (0.86.3)
+Installing React-runtimeexecutor (0.86.3)
+Installing React-runtimescheduler (0.86.3)
+Installing React-timing (0.86.3)
+Installing React-utils (0.86.3)
+Installing React-viewtransitionnativemodule (0.86.3)
+Installing React-webperformancenativemodule (0.86.3)
+Installing ReactAppDependencyProvider (0.86.3)
+Installing ReactCodegen (0.86.3)
+Installing ReactCommon (0.86.3)
+Installing ReactNativeEnrichedMarkdown (0.6.0)
+Installing SDWebImage (5.21.7)
+Installing SDWebImageAVIFCoder (0.11.1)
+Installing SDWebImageSVGCoder (1.7.0)
+Installing SDWebImageWebPCoder (0.14.6)
+Installing SocketRocket (0.7.1)
+Installing Yoga (0.0.0)
+Installing boost (1.84.0)
+Installing expo-dev-client (57.0.19)
+Installing expo-dev-launcher (57.0.20)
+Installing expo-dev-menu (57.0.19)
+Installing expo-dev-menu-interface (57.0.0)
+Installing fast_float (8.0.0)
+Installing fmt (12.1.0)
+Installing glog (0.3.5)
+Installing hermes-engine (250829098.0.17)
+Installing iosMath (0.9.4)
+Installing libavif (1.0.0)
+Installing libdav1d (1.2.0)
+Installing libwebp (1.6.0)
+Installing react-native-keyboard-controller (1.21.9)
+Installing react-native-netinfo (12.0.1)
+Installing react-native-safe-area-context (5.7.0)
+Installing react-native-segmented-control (2.5.7)
+Installing react-native-shiki-engine (0.3.10)
+[Expo] Ensuring required slices in ExpoModulesJSI.xcframework
+Generating Pods project
+Setting USE_HERMES build settings
+Setting REACT_NATIVE_PATH build settings
+Setting SWIFT_ACTIVE_COMPILATION_CONDITIONS build settings
+[Ccache]: Removing Ccache from CC, LD, CXX & LDPLUSPLUS build settings
+[SPM] Cleaning old SPM dependencies from Pods project
+[SPM] Adding SPM dependencies to Pods project
+[Privacy Manifest Aggregation] No existing PrivacyInfo.xcprivacy file found, creating a new one.
+[Privacy Manifest Aggregation] Reading .xcprivacy files to aggregate all used Required Reason APIs.
+file_root: Multica
+Setting CLANG_CXX_LANGUAGE_STANDARD to c++20 on /Users/runner/work/multica/multica/apps/mobile/ios/Multica.xcodeproj
 
-Specs satisfying the `Expo (from `../../../node_modules/.pnpm/expo@57.0.27_@babel+core@7.29.0_@expo+dom-webview@57.0.1_@expo+metro-runtime@57.0.16_ex_a25670081ab9258067dba17c52471808/node_modules/expo`)` dependency were found, but they required a higher minimum deployment target.
+==================== DEPRECATION NOTICE =====================
+Calling `pod install` directly is deprecated in React Native
+because we are moving away from Cocoapods toward alternative
+solutions to build the project.
+* If you are using Expo, please run:
+`npx expo run:ios`
+* If you are using the Community CLI, please run:
+`yarn ios`
+=============================================================
 
-[!] [Expo] @expo/dom-webview was not linked: requires iOS 16.4 but app targets 16.2
+Pod install took 69 [s] to run
+Integrating client project
 
-[!] [Expo] @expo/log-box was not linked: requires iOS 16.4 but app targets 16.2
+[!] Please close any current Xcode sessions and use `Multica.xcworkspace` for this project from now on.
+[Expo] Installing the build script for target Multica
+Pod installation complete! There are 126 dependencies from the Podfile and 134 total pods installed.
+[Expo] Raised resource bundle deployment targets to match their pods: RNSVG-RNSVGFilters, SDWebImage-SDWebImage, iosMath-mathFonts
 
-[!] [Expo] @expo/ui was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-asset was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-clipboard was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-constants was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-dev-client was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-dev-launcher was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-dev-menu was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-dev-menu-interface was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-document-picker was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-file-system was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-font was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-glass-effect was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-haptics was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-image was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-image-picker was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-json-utils was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-keep-awake was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-linking was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-localization was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-manifests was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-modules-core was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-modules-core was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-modules-jsi was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-router was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-secure-store was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-symbols was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-system-ui was not linked: requires iOS 16.4 but app targets 16.2
-
-[!] [Expo] expo-updates-interface was not linked: requires iOS 16.4 but app targets 16.2
-pod install exit=1
-Headers
-hermes-engine-artifacts
-Local Podspecs
-Target Support Files
+[!] hermes-engine has added 1 script phase. Please inspect before executing a build. See `https://guides.cocoapods.org/syntax/podspec.html#script_phases` for more information.
+pod install exit=0
+boost
+DoubleConversion
+fast_float
+fmt
+glog

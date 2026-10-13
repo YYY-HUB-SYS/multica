@@ -1,0 +1,70 @@
+name: Publish unsigned IPA to release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-ipa.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUN_ID: 38428012135
+      TAG: ipa-unsigned-run38428012135
+    steps:
+      - name: Fetch artifact from successful run
+        run: |
+          set +e
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/YYY-HUB-SYS/multica/actions/runs/$RUN_ID/artifacts" -o arts.json
+          head -c 600 arts.json
+          ART_ID=$(python3 -c "
+          import json
+          d=json.load(open('arts.json'))
+          ids=[a['id'] for a in d.get('artifacts',[]) if a['name']=='Multica-unsigned-ipa']
+          print(ids[0] if ids else '')")
+          echo "ART_ID=$ART_ID"
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" -o artifact.zip \
+            "https://api.github.com/repos/YYY-HUB-SYS/multica/actions/artifacts/$ART_ID/zip"
+          ls -lh artifact.zip
+          unzip -o artifact.zip -d out
+          find out -name "*.ipa" -exec cp {} Multica-unsigned.ipa \;
+          ls -lh Multica-unsigned.ipa
+          echo "::notice title=ipa-size::$(stat -c%s Multica-unsigned.ipa)"
+
+      - name: Create release
+        run: |
+          set +e
+          # 已存在则复用
+          curl -s -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/YYY-HUB-SYS/multica/releases/tags/$TAG" -o rel.json
+          REL_ID=$(python3 -c "
+          import json
+          try:
+            print(json.load(open('rel.json')).get('id',''))
+          except Exception:
+            print('')")
+          if [ -z "$REL_ID" ]; then
+            curl -s -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/YYY-HUB-SYS/multica/releases" \
+              -d "{\"tag_name\":\"$TAG\",\"name\":\"Multica unsigned IPA (run $RUN_ID)\",\"body\":\"Unsigned IPA produced by Build Multica iOS IPA (unsigned) #12. Install with TrollStore.\"}" -o rel.json
+            REL_ID=$(python3 -c "import json;print(json.load(open('rel.json')).get('id',''))")
+          fi
+          echo "REL_ID=$REL_ID"
+          echo "REL_ID=$REL_ID" >> "$GITHUB_ENV"
+
+      - name: Upload asset
+        run: |
+          set +e
+          curl -s -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/zip" \
+            --data-binary @Multica-unsigned.ipa \
+            "https://uploads.github.com/repos/YYY-HUB-SYS/multica/releases/${REL_ID}/assets?name=Multica-unsigned.ipa" -o up.json
+          head -c 400 up.json
+          echo "::notice title=download-url::https://github.com/YYY-HUB-SYS/multica/releases/download/$TAG/Multica-unsigned.ipa"

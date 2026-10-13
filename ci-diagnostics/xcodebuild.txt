@@ -1,5 +1,5 @@
 Command line invocation:
-    /Applications/Xcode_26.0.1.app/Contents/Developer/usr/bin/xcodebuild -workspace Multica.xcworkspace -scheme Multica -configuration Release -sdk iphoneos -derivedDataPath ../build/DerivedData CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= build
+    /Applications/Xcode_26.0.1.app/Contents/Developer/usr/bin/xcodebuild -workspace Multica.xcworkspace -scheme Multica -configuration Release -sdk iphoneos -archivePath ../build/Multica.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= archive
 
 Build settings from command line:
     CODE_SIGN_IDENTITY = 
@@ -7,6 +7,6 @@ Build settings from command line:
     CODE_SIGNING_REQUIRED = NO
     SDKROOT = iphoneos26.0
 
-2026-10-13 23:32:48.964 xcodebuild[10955:32567] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-32-0048.xcresult
-xcodebuild: error: Found no destinations for the scheme 'Multica' and action build.
+2026-10-13 23:39:21.534 xcodebuild[9390:27302] Writing error result bundle to /var/folders/36/tjdph2t965j8snz9_vkdnw0r0000gn/T/ResultBundle_2026-13-10_23-39-0021.xcresult
+xcodebuild: error: Found no destinations for the scheme 'Multica' and action archive.
 xcodebuild exit=70

@@ -46,71 +46,109 @@ jobs:
           EXPO_NO_TELEMETRY: 1
           CI: true
         run: |
+          set +e
           cd apps/mobile
           if [ ! -f .env.production.local ]; then
             cp .env.production.example .env.production.local 2>/dev/null || true
           fi
           pnpm exec expo prebuild -p ios --no-install
-          echo "== generated ios dir =="
+          code=$?
           ls -la ios
+          echo "prebuild exit=$code"
+          [ "$code" -ne 0 ] && exit "$code"
+          exit 0
 
       - name: Prep diagnostics dir
-        if: always()
         run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
+
+      - name: Report failure diagnostics
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          LOG_NAME: ${{ env.LOG_NAME }}
+        with:
+          script: |
+            const fs = require('fs');
+            const name = process.env.LOG_NAME || '';
+            if (!name) return;
+            const p = `${process.env.GITHUB_WORKSPACE}/ci-diagnostics/${name}`;
+            if (!fs.existsSync(p)) { console.log('no log:', p); return; }
+            let txt = fs.readFileSync(p, 'utf8');
+            const tail = txt.split('\n').slice(-120).join('\n');
+            await core.summary.addHeading(`${name} (tail)`, 3).addCodeBlock(tail).write();
 
       - name: Install CocoaPods dependencies (with diagnostics)
         id: pods
+        env:
+          LOG_NAME: pod-install.log
         run: |
-          set -o pipefail
+          set +e   # 关键：关闭 bash -e，否则失败会直接中止，诊断代码永远执行不到
           cd apps/mobile/ios
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log"
           {
             echo "== versions =="
             node -v
             ruby -v
-            pod --version || true
+            pod --version
             xcodebuild -version
             echo "== ios dir =="
             ls -la
-            echo "== pod install (attempt 1: plain) =="
-            pod install || {
-              echo "---- attempt 1 failed, retry with --repo-update ----"
+            echo "== Podfile =="
+            cat Podfile 2>/dev/null | head -40
+            echo "== pod install attempt 1 =="
+            pod install
+            echo "attempt1 exit=$?"
+            echo "== Pods dir after attempt 1 =="
+            ls -la Pods 2>/dev/null | head -10
+          } > "$LOG" 2>&1
+          if [ ! -d Pods ]; then
+            {
+              echo "== pod install attempt 2 (--repo-update) =="
               pod install --repo-update
-            }
-          } 2>&1 | tee "$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log"
-          status=$?
-          if [ "$status" -ne 0 ]; then
-            echo "### pod install failed (exit $status)" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            tail -120 "$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            echo "::error title=pod install failed, see job summary::$(tail -c 800 "$GITHUB_WORKSPACE/ci-diagnostics/pod-install.log" | tr '\n' ' ')"
-            cd "$GITHUB_WORKSPACE"
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add ci-diagnostics || true
-            git commit -m "ci: pod install diagnostics (run ${GITHUB_RUN_ID})" || true
-            git push || echo "diag push failed (check permissions)" >> "$GITHUB_STEP_SUMMARY"
-            exit "$status"
+              echo "attempt2 exit=$?"
+            } >> "$LOG" 2>&1
           fi
-          echo "== post pod install ==" >> "$GITHUB_STEP_SUMMARY"
-          ls -1 *.xcworkspace >> "$GITHUB_STEP_SUMMARY" || true
+          cat "$LOG"
+          if [ -d Pods ]; then
+            echo "pods OK"
+            exit 0
+          fi
+          # 失败：annotation（页面上直接可见）+ 写仓库（外部可读）
+          SUMMARY_TXT=$(tail -40 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1200)
+          echo "::error title=pod-install-failed::$SUMMARY_TXT"
+          cd "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ci-diagnostics
+          git commit -m "ci: pod install diagnostics (run ${GITHUB_RUN_ID})"
+          git push
+          echo "push exit=$?"
+          exit 1
+
+      - name: Upload pods diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-diagnostics-pod
+          path: ci-diagnostics/
+          if-no-files-found: ignore
 
       - name: Build unsigned .app (Release)
+        env:
+          LOG_NAME: xcodebuild.log
         run: |
-          set -o pipefail
+          set +e
           cd apps/mobile/ios
-          # workspace 名称由 app.config.ts 的 name 决定（Multica），不写死大小写
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log"
           WORKSPACE=$(ls -d *.xcworkspace 2>/dev/null | head -1)
           if [ -z "$WORKSPACE" ]; then
-            echo "::error title=workspace not found::run pod install first; ios dir: $(ls)"
+            echo "::error title=workspace-not-found::ios dir listing: $(ls | tr '\n' '|' | cut -c1-600)"
             exit 1
           fi
-          # scheme 取 app.config.ts 的 scheme，不存在则回退第一个
           SCHEMES=$(xcodebuild -list -workspace "$WORKSPACE" -json 2>/dev/null | tr -d '\n' | sed -n 's/.*"schemes": *\[\([^]]*\)\].*/\1/p' | tr -d '" ')
           SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | grep -i '^multica$' | head -1)
           [ -z "$SCHEME" ] && SCHEME=$(echo "$SCHEMES" | tr ',' '\n' | head -1)
           echo "WORKSPACE=$WORKSPACE SCHEME=$SCHEME"
-          echo "workspace=$WORKSPACE scheme=$SCHEME" >> "$GITHUB_STEP_SUMMARY"
           {
             xcodebuild \
               -workspace "$WORKSPACE" \
@@ -122,25 +160,33 @@ jobs:
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGN_IDENTITY="" \
               build
-          } 2>&1 | tee "$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log"
-          status=$?
-          if [ "$status" -ne 0 ]; then
-            echo "### xcodebuild failed (exit $status)" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            tail -120 "$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            echo "::error title=xcodebuild failed, see job summary::$(tail -c 800 "$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.log" | tr '\n' ' ')"
+            echo "xcodebuild exit=$?"
+          } > "$LOG" 2>&1
+          tail -60 "$LOG"
+          if ! grep -q "xcodebuild exit=0" "$LOG"; then
+            SUMMARY_TXT=$(tail -40 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1200)
+            echo "::error title=xcodebuild-failed::$SUMMARY_TXT"
             cd "$GITHUB_WORKSPACE"
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add ci-diagnostics || true
-            git commit -m "ci: xcodebuild diagnostics (run ${GITHUB_RUN_ID})" || true
-            git push || echo "diag push failed (check permissions)" >> "$GITHUB_STEP_SUMMARY"
-            exit "$status"
+            git add ci-diagnostics
+            git commit -m "ci: xcodebuild diagnostics (run ${GITHUB_RUN_ID})"
+            git push
+            exit 1
           fi
+          exit 0
+
+      - name: Upload xcodebuild diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-diagnostics-xcodebuild
+          path: ci-diagnostics/
+          if-no-files-found: ignore
 
       - name: Package unsigned .ipa
         run: |
+          set +e
           cd apps/mobile
           APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d | head -1)
           echo "APP_PATH=$APP_PATH"

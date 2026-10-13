@@ -128,14 +128,17 @@ jobs:
             ls Pods 2>/dev/null | head -5
           } > "$LOG" 2>&1
           cat "$LOG"
-          if [ -d Pods ]; then
-            echo "pods OK"
+          # 成功判据：Pods 目录存在 且 workspace 存在（pod install 真正的产出）
+          WS=$(ls -d *.xcworkspace 2>/dev/null | head -1)
+          if [ -d Pods ] && [ -n "$WS" ]; then
+            echo "pods OK, workspace=$WS"
             exit 0
           fi
           ERR=$(grep -nEi 'error|fatal|failed|exception|not found|no such|cannot|unable to|exit=' "$LOG" | grep -v 'Enabling modular headers' | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
           echo "::error title=pod-error-lines::$ERR"
           LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
           echo "::error title=pod-last-lines::$LAST"
+          echo "::error title=pod-workspace-status::Pods=$([ -d Pods ] && echo yes || echo no) WS=$WS dir=$(ls | tr '\n' '|')"
           cd "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

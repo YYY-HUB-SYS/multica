@@ -61,22 +61,6 @@ jobs:
       - name: Prep diagnostics dir
         run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
 
-      - name: Report failure diagnostics
-        if: always()
-        uses: actions/github-script@v7
-        env:
-          LOG_NAME: ${{ env.LOG_NAME }}
-        with:
-          script: |
-            const fs = require('fs');
-            const name = process.env.LOG_NAME || '';
-            if (!name) return;
-            const p = `${process.env.GITHUB_WORKSPACE}/ci-diagnostics/${name}`;
-            if (!fs.existsSync(p)) { console.log('no log:', p); return; }
-            let txt = fs.readFileSync(p, 'utf8');
-            const tail = txt.split('\n').slice(-120).join('\n');
-            await core.summary.addHeading(`${name} (tail)`, 3).addCodeBlock(tail).write();
-
       - name: Install CocoaPods dependencies (with diagnostics)
         id: pods
         env:
@@ -94,12 +78,12 @@ jobs:
             echo "== ios dir =="
             ls -la
             echo "== Podfile =="
-            cat Podfile 2>/dev/null | head -40
+            head -40 Podfile 2>/dev/null
             echo "== pod install attempt 1 =="
             pod install
             echo "attempt1 exit=$?"
             echo "== Pods dir after attempt 1 =="
-            ls -la Pods 2>/dev/null | head -10
+            ls Pods 2>/dev/null | head -10
           } > "$LOG" 2>&1
           if [ ! -d Pods ]; then
             {
@@ -113,16 +97,18 @@ jobs:
             echo "pods OK"
             exit 0
           fi
-          # 失败：annotation（页面上直接可见）+ 写仓库（外部可读）
-          SUMMARY_TXT=$(tail -40 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1200)
-          echo "::error title=pod-install-failed::$SUMMARY_TXT"
+          ERR=$(grep -nEi 'error|fatal|failed|exception|not found|no such|cannot|unable to|exit=' "$LOG" | grep -v 'Enabling modular headers' | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
+          echo "::error title=pod-error-lines::$ERR"
+          LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
+          echo "::error title=pod-last-lines::$LAST"
           cd "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add ci-diagnostics
           git commit -m "ci: pod install diagnostics (run ${GITHUB_RUN_ID})"
-          git push
-          echo "push exit=$?"
+          git push > /tmp/push.log 2>&1
+          PUSHRC=$?
+          echo "::error title=diag-push-result::exit=$PUSHRC :: $(tail -5 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-500)"
           exit 1
 
       - name: Upload pods diagnostics
@@ -164,14 +150,18 @@ jobs:
           } > "$LOG" 2>&1
           tail -60 "$LOG"
           if ! grep -q "xcodebuild exit=0" "$LOG"; then
-            SUMMARY_TXT=$(tail -40 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1200)
-            echo "::error title=xcodebuild-failed::$SUMMARY_TXT"
+            ERR=$(grep -nEi 'error:|fatal|failed|exception|not found|no such|cannot|unable to|exit=|BUILD' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
+            echo "::error title=xcode-error-lines::$ERR"
+            LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
+            echo "::error title=xcode-last-lines::$LAST"
             cd "$GITHUB_WORKSPACE"
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add ci-diagnostics
             git commit -m "ci: xcodebuild diagnostics (run ${GITHUB_RUN_ID})"
-            git push
+            git push > /tmp/push.log 2>&1
+            PUSHRC=$?
+            echo "::error title=diag-push-result::exit=$PUSHRC :: $(tail -5 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-500)"
             exit 1
           fi
           exit 0

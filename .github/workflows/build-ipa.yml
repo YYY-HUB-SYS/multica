@@ -300,27 +300,67 @@ jobs:
         run: |
           set +e
           MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/package.txt"
           echo "STEP-START package $(date -u +%FT%TZ)" >> "$MARK"
           cd apps/mobile
-          # archive 路线的产物在 xcarchive 里；build 路线在 DerivedData 里。两者都找。
-          APP_PATH=$(ls -d build/Multica.xcarchive/Products/Applications/*.app 2>/dev/null | head -1)
-          if [ -z "$APP_PATH" ]; then
-            APP_PATH=$(find build/DerivedData/Build/Products -name "*.app" -type d 2>/dev/null | head -1)
-          fi
-          echo "APP_PATH=$APP_PATH"
+          {
+            echo "== find .app candidates =="
+            find build/DerivedData/Build/Products -maxdepth 3 -name "*.app" 2>/dev/null | head -10
+            echo "== xcarchive candidates =="
+            ls -d build/Multica.xcarchive/Products/Applications/*.app 2>/dev/null
+            # 优先真实目录（非 symlink），且必须在 Release-iphoneos 下
+            APP_PATH=""
+            for CAND in $(find build/DerivedData/Build/Products -maxdepth 3 -name "*.app" 2>/dev/null); do
+              if [ -d "$CAND" ] && [ ! -L "$CAND" ] && echo "$CAND" | grep -q "Release-iphoneos"; then
+                APP_PATH="$CAND"
+                break
+              fi
+            done
+            # fallback：任何非 symlink 的 .app
+            if [ -z "$APP_PATH" ]; then
+              for CAND in $(find build/DerivedData/Build/Products -maxdepth 3 -name "*.app" 2>/dev/null); do
+                if [ -d "$CAND" ] && [ ! -L "$CAND" ]; then APP_PATH="$CAND"; break; fi
+              done
+            fi
+            echo "SELECTED_APP=$APP_PATH"
+            if [ -z "$APP_PATH" ]; then
+              echo "NO_APP_FOUND=1"
+            else
+              echo "app size: $(du -sh "$APP_PATH" 2>/dev/null | cut -f1)"
+              echo "binary size: $(stat -f%z "$APP_PATH/Multica" 2>/dev/null)"
+              echo "Info.plist MinimumOSVersion: $(/usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$APP_PATH/Info.plist" 2>/dev/null)"
+            fi
+          } > "$LOG" 2>&1
+          cat "$LOG"
           if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
             echo "STEP-END package exit=1 $(date -u +%FT%TZ)" >> "$MARK"
-            echo "::error title=no-app-found::xcarchive/DerivedData both empty. build dir: $(ls build 2>/dev/null | tr '\n' '|')"
+            echo "::error title=no-app-found::$(cat "$LOG" | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-1400)"
+            exit 1
+          fi
+          # 校验 app 二进制存在且大于 1MB（防止 zip 出空壳）
+          BIN_SIZE=$(stat -f%z "$APP_PATH/Multica" 2>/dev/null || echo 0)
+          if [ -z "$BIN_SIZE" ] || [ "$BIN_SIZE" -lt 1000000 ]; then
+            echo "STEP-END package exit=1 $(date -u +%FT%TZ)" >> "$MARK"
+            echo "::error title=app-binary-too-small::bin size=$BIN_SIZE app=$APP_PATH"
             exit 1
           fi
           mkdir -p build/Payload
           rm -rf build/Payload/*.app
-          cp -R "$APP_PATH" build/Payload/
+          # ditto 保留符号链接/权限，比 cp -R 更可靠
+          ditto "$APP_PATH" build/Payload/Multica.app
+          echo "Payload size: $(du -sh build/Payload 2>/dev/null | cut -f1)"
           cd build
+          rm -f Multica-unsigned.ipa
           zip -qr Multica-unsigned.ipa Payload
           ls -lh Multica-unsigned.ipa
-          /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "../$APP_PATH/Info.plist" || true
+          echo "zip file size: $(stat -f%z Multica-unsigned.ipa 2>/dev/null)"
           echo "STEP-END package exit=0 $(date -u +%FT%TZ)" >> "$MARK"
+          # 成功后也把 package 实况 push 回仓库，便于核对产物
+          cp "$LOG" "$GITHUB_WORKSPACE/ci-diagnostics/package.txt"
+          git add -f ci-diagnostics
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "ci: package diagnostics (run ${GITHUB_RUN_ID})" --allow-empty 2>/dev/null || true
+          git push -q origin HEAD:main >/tmp/pkgpush.log 2>&1 || echo "pkg-push-skip: $(tail -2 /tmp/pkgpush.log | tr '\n' '|')"
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
@@ -328,6 +368,47 @@ jobs:
           name: Multica-unsigned-ipa
           path: apps/mobile/build/Multica-unsigned.ipa
           if-no-files-found: error
+
+      - name: Publish unsigned IPA to release
+        # 构建成功后直接在本 job 内发布公开 Release（asset 无需鉴权即可下载），
+        # 不再依赖 workflow_run 触发（publish-ipa.yml 已废弃此用法）。
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          cd apps/mobile/build
+          if [ ! -f Multica-unsigned.ipa ]; then
+            echo "::error title=ipa-missing::Multica-unsigned.ipa not found"
+            exit 1
+          fi
+          TAG="ipa-unsigned-run${GITHUB_RUN_ID}"
+          NAME="Multica unsigned IPA (run ${GITHUB_RUN_ID})"
+          # 幂等：tag 已存在则删除旧 release/asset 重新上传
+          EXISTING=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TAG" | python3 -c "import sys,json;print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
+          if [ -n "$EXISTING" ]; then
+            curl -s -X DELETE -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$EXISTING"
+            git tag -d "$TAG" 2>/dev/null; git push origin ":$TAG" 2>/dev/null
+          fi
+          curl -s -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" \
+            -d "{\"tag_name\":\"$TAG\",\"name\":\"$NAME\",\"body\":\"Unsigned IPA produced by Build workflow run ${GITHUB_RUN_ID}. MinimumOSVersion 15.1, installable on iOS 16.2 via TrollStore.\"}" -o rel.json
+          REL_ID=$(python3 -c "import json;print(json.load(open('rel.json')).get('id',''))" 2>/dev/null)
+          echo "REL_ID=$REL_ID"
+          if [ -z "$REL_ID" ]; then
+            echo "::error title=release-create-failed::$(cat rel.json | head -c 500 | tr '\n' '|')"
+            exit 1
+          fi
+          # 上传 IPA asset
+          curl -s -X POST -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Content-Type: application/zip" \
+            "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$REL_ID/assets?name=Multica-unsigned.ipa" \
+            --data-binary "@Multica-unsigned.ipa" -o asset.json
+          echo "ASSET: $(python3 -c "import json;d=json.load(open('asset.json'));print(d.get('name'), d.get('size'), d.get('browser_download_url',''))" 2>/dev/null)"
+          echo "RELEASE_URL: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG"
+          echo "STEP-END publish exit=0 $(date -u +%FT%TZ)" >> "$MARK"
 
       - name: Push diagnostics on failure (catch-all)
         # 任何步骤失败都走这里：汇总 steps 标记 + 各日志尾部 + 仓库实况，

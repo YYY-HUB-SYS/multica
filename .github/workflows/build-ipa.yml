@@ -255,21 +255,18 @@ jobs:
             echo "::error title=iphoneos-sdk-missing::xcrun cannot find iphoneos SDK. Xcode=$(xcodebuild -version 2>&1 | tr '\n' '|')"
             exit 1
           fi
-          {
-            # #12 已验证成功的组合：destination + build + DerivedData。
-            # （archive / -sdk 路线在新 Xcode 同样要 destination 匹配，已实测无效）
-            xcodebuild \
-              -workspace "$WORKSPACE" \
-              -scheme "$SCHEME" \
-              -configuration Release \
-              -derivedDataPath ../build/DerivedData \
-              -destination 'generic/platform=iOS' \
-              CODE_SIGNING_ALLOWED=NO \
-              CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGN_IDENTITY="" \
-              build
-            echo "xcodebuild exit=$?"
-          } > "$LOG" 2>&1
+          # 直接执行 xcodebuild 并保留真实退出码（不要放进大括号 + echo，否则 $? 被 echo 覆盖）
+          set +e
+          xcodebuild \
+            -workspace "$WORKSPACE" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -derivedDataPath ../build/DerivedData \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build > "$LOG" 2>&1
           XC_RC=$?
           tail -40 "$LOG"
           echo "xcodebuild rc=$XC_RC"

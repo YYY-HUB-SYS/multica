@@ -85,6 +85,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         {
           ios: {
             buildReactNativeFromSource: true,
+            // expo-router 55.0.14 的 LinkPreview 组件使用了 iOS 16.0+ 的
+            // SwiftUI `subtitle` API，部署目标低于 16.0 会编译失败。
+            // 目标设备 iPhone XS Max 是 iOS 16.2，设 16.0 完全满足且避免
+            // "only available in iOS 16.0" 错误。
+            deploymentTarget: "16.0",
           },
         },
       ],

@@ -1,2 +1,1 @@
-    |                    |- error: 'subtitle' is only available in iOS 16.0 or newer
-/Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeActionView.swift:141:20: error: 'subtitle' is only available in iOS 16.0 or newer
+ 49 |     "Multiple selection is only available on iOS 14+"

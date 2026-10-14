@@ -1,4 +1,4 @@
-# Failure report run=38516803613 commit=8907c506ab4924e8f70a9e0ac9eb82bff35d1d53
+# Failure report run=38525243709 commit=f4af95e9e7a64de70ceb15b1e4eb76cae75f92b8
 == step markers (last START without END = failing step) ==
 STEP-START checkout exit=0 2026-10-14T00:42:23Z
 STEP-START setup-pnpm 2026-10-14T00:42:24Z
@@ -51,6 +51,25 @@ STEP-START bump-pods-target 2026-10-14T05:31:52Z
 STEP-END bump-pods-target exit=0 2026-10-14T05:31:52Z
 STEP-START xcodebuild 2026-10-14T05:31:52Z
 STEP-END xcodebuild exit=1 2026-10-14T05:47:42Z
+STEP-START checkout exit=0 2026-10-14T06:57:16Z
+STEP-START setup-pnpm 2026-10-14T06:57:16Z
+STEP-END setup-pnpm exit=0 2026-10-14T06:57:22Z
+STEP-START setup-node 2026-10-14T06:57:22Z
+STEP-END setup-node exit=0 2026-10-14T06:58:14Z
+STEP-START pin-xcode 2026-10-14T06:58:14Z
+STEP-END pin-xcode exit=0 2026-10-14T06:58:25Z
+STEP-START install 2026-10-14T06:58:25Z
+STEP-END install exit=0 2026-10-14T06:58:57Z
+STEP-START prebuild 2026-10-14T06:58:57Z
+STEP-END prebuild exit=0 2026-10-14T06:59:00Z
+STEP-START pod-install 2026-10-14T06:59:00Z
+STEP-END pod-install exit=0 2026-10-14T07:00:24Z
+STEP-START bump-pods-target 2026-10-14T07:00:24Z
+STEP-END bump-pods-target exit=0 2026-10-14T07:00:25Z
+STEP-START xcodebuild 2026-10-14T07:00:25Z
+STEP-END xcodebuild exit=0 2026-10-14T07:15:42Z
+STEP-START package 2026-10-14T07:15:42Z
+STEP-END package exit=0 2026-10-14T07:15:44Z
 == runner info ==
 Darwin sat12-bq160-b9f1bb6c-72d4-4414-b0bd-c44e2df0a60a-BEB7FDF41848.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
 ProductName:		macOS
@@ -73,10 +92,16 @@ BuildVersion:		26A434
 Xcode 27.0
 Build version 27A266a
 GITHUB_RUN_ID=38516803613
+Darwin sjc20-bb660-2a668af7-5a9c-468e-826a-d8c6f0359390-063CA566DC8F.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38525243709
 == log tails ==
 --- ci-diagnostics/availability-warnings.txt ---
-    |                    |- error: 'subtitle' is only available in iOS 16.0 or newer
-/Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeActionView.swift:141:20: error: 'subtitle' is only available in iOS 16.0 or newer
+ 49 |     "Multiple selection is only available on iOS 14+"
 --- ci-diagnostics/bump-pods-target.txt ---
 == deployment targets before ==
    2 IPHONEOS_DEPLOYMENT_TARGET = 12.4
@@ -95,26 +120,20 @@ GITHUB_RUN_ID=38516803613
 == deployment targets after ==
    6 IPHONEOS_DEPLOYMENT_TARGET = 15.0
  280 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+== Pods targets before ==
+   2 IPHONEOS_DEPLOYMENT_TARGET = 12.4
+ 280 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+   2 IPHONEOS_DEPLOYMENT_TARGET = 6.0
+   2 IPHONEOS_DEPLOYMENT_TARGET = 9.0
+== Pods targets after ==
+ 290 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+== App targets before/after ==
+   2 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   2 IPHONEOS_DEPLOYMENT_TARGET = 16.0
    4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
 --- ci-diagnostics/FAILURE-REPORT.txt ---
-STEP-START setup-node 2026-10-14T05:28:42Z
-STEP-END setup-node exit=0 2026-10-14T05:29:23Z
-STEP-START pin-xcode 2026-10-14T05:29:23Z
-STEP-END pin-xcode exit=0 2026-10-14T05:29:34Z
-STEP-START install 2026-10-14T05:29:35Z
-STEP-END install exit=0 2026-10-14T05:30:08Z
-STEP-START prebuild 2026-10-14T05:30:08Z
-STEP-END prebuild exit=0 2026-10-14T05:30:11Z
-STEP-START pod-install 2026-10-14T05:30:11Z
-STEP-END pod-install exit=0 2026-10-14T05:31:51Z
-STEP-START bump-pods-target 2026-10-14T05:31:52Z
-STEP-END bump-pods-target exit=0 2026-10-14T05:31:52Z
-STEP-START xcodebuild 2026-10-14T05:31:52Z
-STEP-END xcodebuild exit=1 2026-10-14T05:47:42Z
-== runner info ==
-Darwin sat12-bq160-b9f1bb6c-72d4-4414-b0bd-c44e2df0a60a-BEB7FDF41848.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
-ProductName:		macOS
-ProductVersion:		27.0.1
 BuildVersion:		26A434
 Xcode 27.0
 Build version 27A266a
@@ -133,10 +152,16 @@ BuildVersion:		26A434
 Xcode 27.0
 Build version 27A266a
 GITHUB_RUN_ID=38516803613
+Darwin sjc20-bb660-2a668af7-5a9c-468e-826a-d8c6f0359390-063CA566DC8F.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38525243709
 == log tails ==
 --- ci-diagnostics/availability-warnings.txt ---
-    |                    |- error: 'subtitle' is only available in iOS 16.0 or newer
-/Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeActionView.swift:141:20: error: 'subtitle' is only available in iOS 16.0 or newer
+ 49 |     "Multiple selection is only available on iOS 14+"
 --- ci-diagnostics/bump-pods-target.txt ---
 == deployment targets before ==
    2 IPHONEOS_DEPLOYMENT_TARGET = 12.4
@@ -155,6 +180,18 @@ GITHUB_RUN_ID=38516803613
 == deployment targets after ==
    6 IPHONEOS_DEPLOYMENT_TARGET = 15.0
  280 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+== Pods targets before ==
+   2 IPHONEOS_DEPLOYMENT_TARGET = 12.4
+ 280 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+   2 IPHONEOS_DEPLOYMENT_TARGET = 6.0
+   2 IPHONEOS_DEPLOYMENT_TARGET = 9.0
+== Pods targets after ==
+ 290 IPHONEOS_DEPLOYMENT_TARGET = 16.0
+== App targets before/after ==
+   2 IPHONEOS_DEPLOYMENT_TARGET = 15.1
+   2 IPHONEOS_DEPLOYMENT_TARGET = 16.0
    4 IPHONEOS_DEPLOYMENT_TARGET = 16.0
 --- ci-diagnostics/FAILURE-REPORT.txt ---
 --- ci-diagnostics/package.txt ---
@@ -162,36 +199,36 @@ GITHUB_RUN_ID=38516803613
 build/DerivedData/Build/Products/Release-iphoneos/Multica.app
 == xcarchive candidates ==
 SELECTED_APP=build/DerivedData/Build/Products/Release-iphoneos/Multica.app
-app size:   0B
-binary size: 
-Info.plist MinimumOSVersion: File Doesn't Exist, Will Create: build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Info.plist
+app size:  48M
+binary size: 28656632
+Info.plist MinimumOSVersion: 16.0
 --- ci-diagnostics/patched-file.txt ---
 /Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/pluginConfig.js
 --- ci-diagnostics/pnpm-install.txt ---
-Progress: resolved 2038, reused 1864, downloaded 0, added 0
-Progress: resolved 2038, reused 1985, downloaded 0, added 102
+Progress: resolved 2038, reused 1160, downloaded 0, added 0
+Progress: resolved 2038, reused 1880, downloaded 0, added 0
+Progress: resolved 2038, reused 1985, downloaded 0, added 86
 Progress: resolved 2038, reused 1985, downloaded 0, added 196
-Progress: resolved 2038, reused 1985, downloaded 0, added 285
-Progress: resolved 2038, reused 1985, downloaded 0, added 475
-Progress: resolved 2038, reused 1985, downloaded 0, added 682
-Progress: resolved 2038, reused 1985, downloaded 0, added 792
-Progress: resolved 2038, reused 1985, downloaded 0, added 936
-Progress: resolved 2038, reused 1985, downloaded 0, added 1074
-Progress: resolved 2038, reused 1985, downloaded 0, added 1132
-Progress: resolved 2038, reused 1985, downloaded 0, added 1192
-Progress: resolved 2038, reused 1985, downloaded 0, added 1363
-Progress: resolved 2038, reused 1985, downloaded 0, added 1389
-Progress: resolved 2038, reused 1985, downloaded 0, added 1439
-Progress: resolved 2038, reused 1985, downloaded 0, added 1567
-Progress: resolved 2038, reused 1985, downloaded 0, added 1641
-Progress: resolved 2038, reused 1985, downloaded 0, added 1798
-Progress: resolved 2038, reused 1985, downloaded 0, added 1839
+Progress: resolved 2038, reused 1985, downloaded 0, added 271
+Progress: resolved 2038, reused 1985, downloaded 0, added 461
+Progress: resolved 2038, reused 1985, downloaded 0, added 662
+Progress: resolved 2038, reused 1985, downloaded 0, added 796
+Progress: resolved 2038, reused 1985, downloaded 0, added 1008
+Progress: resolved 2038, reused 1985, downloaded 0, added 1099
+Progress: resolved 2038, reused 1985, downloaded 0, added 1138
+Progress: resolved 2038, reused 1985, downloaded 0, added 1221
+Progress: resolved 2038, reused 1985, downloaded 0, added 1371
+Progress: resolved 2038, reused 1985, downloaded 0, added 1407
+Progress: resolved 2038, reused 1985, downloaded 0, added 1473
+Progress: resolved 2038, reused 1985, downloaded 0, added 1568
+Progress: resolved 2038, reused 1985, downloaded 0, added 1644
+Progress: resolved 2038, reused 1985, downloaded 0, added 1805
+Progress: resolved 2038, reused 1985, downloaded 0, added 1855
 Progress: resolved 2038, reused 1985, downloaded 0, added 1868
 Progress: resolved 2038, reused 1985, downloaded 0, added 1885
-Progress: resolved 2038, reused 1985, downloaded 0, added 1886
-Progress: resolved 2038, reused 1985, downloaded 0, added 1893
-Progress: resolved 2038, reused 1985, downloaded 0, added 1932
-Progress: resolved 2038, reused 1985, downloaded 0, added 2011
+Progress: resolved 2038, reused 1985, downloaded 0, added 1890
+Progress: resolved 2038, reused 1985, downloaded 0, added 1903
+Progress: resolved 2038, reused 1985, downloaded 0, added 2007
 Progress: resolved 2038, reused 1985, downloaded 0, added 2038, done
 
 devDependencies:
@@ -227,7 +264,7 @@ apps/desktop postinstall: Done
 │   to run scripts.                                                            │
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
-Done in 32.8s using pnpm v10.28.2
+Done in 31.6s using pnpm v10.28.2
 --- ci-diagnostics/pod-install.txt ---
 Installing SDWebImageAVIFCoder (0.11.1)
 Installing SDWebImageSVGCoder (1.7.0)
@@ -274,7 +311,7 @@ solutions to build the project.
 `yarn ios`
 =============================================================
 
-Pod install took 90 [s] to run
+Pod install took 76 [s] to run
 Integrating client project
 
 [!] Please close any current Xcode sessions and use `Multica.xcworkspace` for this project from now on.
@@ -318,17 +355,14 @@ BuildVersion:		26A434
 Xcode 27.0
 Build version 27A266a
 GITHUB_RUN_ID=38516803613
+Darwin sjc20-bb660-2a668af7-5a9c-468e-826a-d8c6f0359390-063CA566DC8F.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38525243709
 --- ci-diagnostics/steps.txt ---
-STEP-START checkout exit=0 2026-10-14T00:42:23Z
-STEP-START setup-pnpm 2026-10-14T00:42:24Z
-STEP-END setup-pnpm exit=0 2026-10-14T00:42:32Z
-STEP-START setup-node 2026-10-14T00:42:32Z
-STEP-END setup-node exit=0 2026-10-14T00:42:34Z
-STEP-START pin-xcode 2026-10-14T00:42:34Z
-STEP-END pin-xcode exit=0 2026-10-14T00:42:44Z
-STEP-START install 2026-10-14T00:42:44Z
-STEP-END install exit=0 2026-10-14T00:44:25Z
-STEP-START prebuild 2026-10-14T00:44:25Z
 STEP-END prebuild exit=0 2026-10-14T00:44:28Z
 STEP-START pod-install 2026-10-14T00:44:28Z
 STEP-END pod-install exit=0 2026-10-14T00:45:45Z
@@ -370,6 +404,25 @@ STEP-START bump-pods-target 2026-10-14T05:31:52Z
 STEP-END bump-pods-target exit=0 2026-10-14T05:31:52Z
 STEP-START xcodebuild 2026-10-14T05:31:52Z
 STEP-END xcodebuild exit=1 2026-10-14T05:47:42Z
+STEP-START checkout exit=0 2026-10-14T06:57:16Z
+STEP-START setup-pnpm 2026-10-14T06:57:16Z
+STEP-END setup-pnpm exit=0 2026-10-14T06:57:22Z
+STEP-START setup-node 2026-10-14T06:57:22Z
+STEP-END setup-node exit=0 2026-10-14T06:58:14Z
+STEP-START pin-xcode 2026-10-14T06:58:14Z
+STEP-END pin-xcode exit=0 2026-10-14T06:58:25Z
+STEP-START install 2026-10-14T06:58:25Z
+STEP-END install exit=0 2026-10-14T06:58:57Z
+STEP-START prebuild 2026-10-14T06:58:57Z
+STEP-END prebuild exit=0 2026-10-14T06:59:00Z
+STEP-START pod-install 2026-10-14T06:59:00Z
+STEP-END pod-install exit=0 2026-10-14T07:00:24Z
+STEP-START bump-pods-target 2026-10-14T07:00:24Z
+STEP-END bump-pods-target exit=0 2026-10-14T07:00:25Z
+STEP-START xcodebuild 2026-10-14T07:00:25Z
+STEP-END xcodebuild exit=0 2026-10-14T07:15:42Z
+STEP-START package 2026-10-14T07:15:42Z
+STEP-END package exit=0 2026-10-14T07:15:44Z
 --- ci-diagnostics/xcode-inventory.txt ---
 	macOS 27.0                    	-sdk macosx27.0
 	macOS 27.0                    	-sdk macosx27.0
@@ -398,7 +451,7 @@ iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
 tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
 watchOS 27.0 (27.0 - 24R362) - com.apple.CoreSimulator.SimRuntime.watchOS-27-0
 visionOS 27.0 (27.0 - 24M362) - com.apple.CoreSimulator.SimRuntime.xrOS-27-0
-/Users/runner/work/_temp/05558de8-ee47-464e-88b0-85f922bc8799.sh: line 35: timeout: command not found
+/Users/runner/work/_temp/446a2798-20ab-4bf4-bd68-8f9f94d124de.sh: line 35: timeout: command not found
 downloadPlatform exit=0
 DriverKit SDKs:
 	DriverKit 27.0                	-sdk driverkit27.0
@@ -432,50 +485,56 @@ watchOS Simulator SDKs:
 	Simulator - watchOS 27.0      	-sdk watchsimulator27.0
 
 --- ci-diagnostics/xcodebuild.txt ---
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization.swiftdoc /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoLocalization/ExpoLocalization.swiftmodule/arm64-apple-ios.swiftdoc
+    /bin/sh -c /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Script-6381EA0E9108493ABA3D41DC.sh
 
-Copy /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoLocalization/ExpoLocalization.swiftmodule/arm64-apple-ios.abi.json /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization.abi.json (in target 'ExpoLocalization' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization.abi.json /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoLocalization/ExpoLocalization.swiftmodule/arm64-apple-ios.abi.json
+PhaseScriptExecution [CP]\ Embed\ Pods\ Frameworks /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Script-E6D4314ACA64B8A4658EE36A.sh (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    /bin/sh -c /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Script-E6D4314ACA64B8A4658EE36A.sh
+mkdir -p /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Frameworks
+rsync --delete -av --filter P .*.?????? --links --filter "- CVS/" --filter "- .svn/" --filter "- .git/" --filter "- .hg/" --filter "- Headers" --filter "- PrivateHeaders" --filter "- Modules" "/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/XCFrameworkIntermediates/hermes-engine/Pre-built/hermesvm.framework" "/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Frameworks"
+Transfer starting: 3 files
+hermesvm.framework/
+hermesvm.framework/Info.plist
+hermesvm.framework/hermesvm
 
-Copy /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoLocalization/ExpoLocalization.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization.swiftsourceinfo (in target 'ExpoLocalization' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization.swiftsourceinfo /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoLocalization/ExpoLocalization.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo
+sent 4822765 bytes  received 70 bytes  141432111 bytes/sec
+total size is 4821773  speedup is 1.00
 
-CompileC /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/ExpoSystemUI-dummy.o /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSystemUI/ExpoSystemUI-dummy.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'ExpoSystemUI' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    
-    Using response file: /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
-    
-    /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKStatCaches.noindex/iphoneos27.0-24A430-edb66e1c87ad9550e0cc33700c257328.sdkstatcache -target arm64-apple-ios15.1 -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -include /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSystemUI/ExpoSystemUI-prefix.pch -MMD -MT dependencies -MF /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/ExpoSystemUI-dummy.d --serialize-diagnostics /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/ExpoSystemUI-dummy.dia -c /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSystemUI/ExpoSystemUI-dummy.m -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSystemUI.build/Objects-normal/arm64/ExpoSystemUI-dummy.o
+CopySwiftLibs /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    builtin-swiftStdLibTool --copy --verbose --scan-executable /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Multica --scan-folder /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Frameworks --scan-folder /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/PlugIns --scan-folder /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/SystemExtensions --scan-folder /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Extensions --platform iphoneos --toolchain /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os --back-deploy-swift-span
+Ignoring --strip-bitcode because --sign was not passed
 
-CompileC /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/ExpoSymbols-dummy.o /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSymbols/ExpoSymbols-dummy.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'ExpoSymbols' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    
-    Using response file: /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
-    
-    /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKStatCaches.noindex/iphoneos27.0-24A430-edb66e1c87ad9550e0cc33700c257328.sdkstatcache -target arm64-apple-ios15.1 -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -include /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSymbols/ExpoSymbols-prefix.pch -MMD -MT dependencies -MF /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/ExpoSymbols-dummy.d --serialize-diagnostics /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/ExpoSymbols-dummy.dia -c /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSymbols/ExpoSymbols-dummy.m -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSymbols.build/Objects-normal/arm64/ExpoSymbols-dummy.o
+ExtractAppIntentsMetadata (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Multica --sdk-root /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk --xcode-version 27A266a --platform-family iOS --deployment-target 16.0 --bundle-identifier ai.multica.mobile --output /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app --target-triple arm64-apple-ios16.0 --binary-file /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Multica --dependency-file /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Objects-normal/arm64/Multica_dependency_info.dat --stringsdata-file /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Objects-normal/arm64/Multica.SwiftFileList --metadata-file-list /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Multica.DependencyMetadataFileList --static-metadata-file-list /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Multica.DependencyStaticMetadataFileList --swift-const-vals-list /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Objects-normal/arm64/Multica.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-10-14 07:15:38.345 appintentsmetadataprocessor[90442:217657] Starting appintentsmetadataprocessor export
+2026-10-14 07:15:38.374 appintentsmetadataprocessor[90442:217657] warning: Metadata extraction skipped, no AppIntents.framework dependency found
 
-ScanDependencies /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/ExpoSecureStore-dummy.o /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSecureStore/ExpoSecureStore-dummy.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'ExpoSecureStore' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    
-    Using response file: /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
-    
-    builtin-ScanDependencies -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/ExpoSecureStore-dummy.o.scan -- /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKStatCaches.noindex/iphoneos27.0-24A430-edb66e1c87ad9550e0cc33700c257328.sdkstatcache -target arm64-apple-ios15.1 -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -include /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSecureStore/ExpoSecureStore-prefix.pch -MMD -MT dependencies -MF /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/ExpoSecureStore-dummy.d --serialize-diagnostics /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/ExpoSecureStore-dummy.dia -c /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoSecureStore/ExpoSecureStore-dummy.m -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoSecureStore.build/Objects-normal/arm64/ExpoSecureStore-dummy.o
+AppIntentsSSUTraining (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsnltrainingprocessor --infoplist-path /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Info.plist --temp-dir-path /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/ssu --bundle-id ai.multica.mobile --product-path /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app --extracted-metadata-path /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Metadata.appintents --metadata-file-list /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Multica.build/Release-iphoneos/Multica.build/Multica.DependencyMetadataFileList --source-file /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Info.plist --archive-ssu-assets
+2026-10-14 07:15:38.411 appintentsnltrainingprocessor[90446:217664] Parsing options for appintentsnltrainingprocessor
+2026-10-14 07:15:38.412 appintentsnltrainingprocessor[90446:217664] Starting AppIntents SSU YAML Generation
+2026-10-14 07:15:38.417 appintentsnltrainingprocessor[90446:217664] No AppShortcuts found - Skipping.
 
-ScanDependencies /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization-dummy.o /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoLocalization/ExpoLocalization-dummy.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler (in target 'ExpoLocalization' from project 'Pods')
-    cd /Users/runner/work/multica/multica/apps/mobile/ios/Pods
-    
-    Using response file: /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp
-    
-    builtin-ScanDependencies -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization-dummy.o.scan -- /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -ivfsstatcache /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKStatCaches.noindex/iphoneos27.0-24A430-edb66e1c87ad9550e0cc33700c257328.sdkstatcache -target arm64-apple-ios15.1 -fmessage-length\=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit\=0 -fno-color-diagnostics -fmodules-prune-interval\=86400 -fmodules-prune-after\=345600 -fbuild-session-file\=/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/ModuleCache.noindex/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror\=non-modular-include-in-framework-module -Wno-trigraphs -Wno-missing-field-initializers -Wno-missing-prototypes -Werror\=return-type -Wdocumentation -Wunreachable-code -Wno-implicit-atomic-properties -Werror\=deprecated-objc-isa-usage -Wno-objc-interface-ivars -Werror\=objc-root-class -Wno-arc-repeated-use-of-weak -Wimplicit-retain-self -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wno-float-conversion -Wnon-literal-null-conversion -Wobjc-literal-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wdeprecated-implementations -Wno-implicit-fallthrough -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Wno-sign-conversion -Winfinite-recursion -Wcomma -Wblock-capture-autoreleasing -Wstrict-prototypes -Wno-semicolon-before-method-body -Wunguarded-availability @/Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/e6072d4f65d7061329687fe24e3d63a7-common-args.resp -include /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoLocalization/ExpoLocalization-prefix.pch -MMD -MT dependencies -MF /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization-dummy.d --serialize-diagnostics /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization-dummy.dia -c /Users/runner/work/multica/multica/apps/mobile/ios/Pods/Target\ Support\ Files/ExpoLocalization/ExpoLocalization-dummy.m -o /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoLocalization.build/Objects-normal/arm64/ExpoLocalization-dummy.o
+RegisterExecutionPolicyException /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    builtin-RegisterExecutionPolicyException /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app
+
+Validate /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    builtin-validationUtility /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app -validate-for-store -shallow-bundle -infoplist-subpath Info.plist
+
+Touch /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app (in target 'Multica' from project 'Multica')
+    cd /Users/runner/work/multica/multica/apps/mobile/ios
+    /usr/bin/touch -c /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/Multica.app
+
+PruneExplicitPrecompiledModules /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules
 
 PruneExplicitPrecompiledModules /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/ExplicitPrecompiledModules
 
 PruneExplicitPrecompiledModules /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
-
-PruneExplicitPrecompiledModules /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules
 
 warning: Run script build phase '[CP-User] [Hermes] Replace Hermes for the right configuration, if needed' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'hermes-engine' from project 'Pods')
 note: Run script build phase '[Expo] Configure project' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Multica' from project 'Multica')
@@ -483,21 +542,18 @@ note: Run script build phase 'Bundle React Native code and images' will be run d
 warning: Run script build phase '[Expo Dev Launcher] Strip Local Network Keys for Release' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'Multica' from project 'Multica')
 note: Run script build phase '[CP-User] [RN]Check FBReactNativeSpec' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'React-RCTFBReactNativeSpec' from project 'Pods')
 note: Run script build phase '[CP-User] Generate app.config for prebuilt Constants.manifest' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'EXConstants' from project 'Pods')
-** BUILD FAILED **
+** BUILD SUCCEEDED **
 
-
-The following build commands failed:
-	SwiftCompile normal arm64 (in target 'ExpoRouter' from project 'Pods')
-	SwiftCompile normal arm64 Compiling\ ExpoHeadAppDelegateSubscriber.swift,\ ExpoHeadModule.swift,\ LinkPreviewNativeActionView.swift,\ LinkPreviewNativeModule.swift,\ LinkPreviewNativeNavigation.swift,\ LinkPreviewNativePreviewView.swift,\ LinkPreviewNativeView.swift,\ LinkZoomTransition.swift,\ RNScreensTabCompat.swift,\ RouterFontUtils.swift,\ RouterToolbarHostView.swift,\ RouterToolbarItemView.swift,\ RouterToolbarModule.swift,\ RouterViewWithLogger.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/ExpoHeadAppDelegateSubscriber.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/ExpoHeadModule.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeActionView.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeModule.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeNavigation.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativePreviewView.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkPreviewNativeView.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/LinkZoomTransition.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/LinkPreview/RNScreensTabCompat.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/Toolbar/RouterFontUtils.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/Toolbar/RouterToolbarHostView.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/Toolbar/RouterToolbarItemView.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/Toolbar/RouterToolbarModule.swift /Users/runner/work/multica/multica/node_modules/.pnpm/expo-router@55.0.14_28857138dad78e037ca803b5df54c4f8/node_modules/expo-router/ios/RouterViewWithLogger.swift /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreGraphics.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_Concurrency.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/ObjectiveC.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/UIKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Accelerate.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/LocalAuthentication.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CryptoKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_Builtin_float.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/MediaToolbox.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreLocation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Symbols.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_StringProcessing.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreData.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/AudioToolbox.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Darwin.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Dispatch.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/AVFoundation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/os.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Swift.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/SwiftUICore.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/FileProvider.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreFoundation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/SwiftUI.swiftmodule/arm64e-apple-ios.swiftmodule /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/ExpoModulesCore/ExpoModulesCore.swiftmodule/arm64-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreVideo.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/AVFAudio.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreTransferable.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Accessibility.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_DarwinFoundation3.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreMIDI.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/simd.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_DarwinFoundation1.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreMotion.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreMedia.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Observation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Metal.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/XPC.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/VideoToolbox.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/DeveloperToolsSupport.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/TipKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/UniformTypeIdentifiers.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Spatial.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/_DarwinFoundation2.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Combine.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreImage.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreSpotlight.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/QuartzCore.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/DataDetection.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/AVKit.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreText.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/System.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/CoreAudio.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/Foundation.swiftmodule/arm64e-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/ImageIO.swiftmodule/arm64e-apple-ios.swiftmodule /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Products/Release-iphoneos/RNScreens/RNScreens.swiftmodule/arm64-apple-ios.swiftmodule /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/prebuilt-modules/27.0/OSLog.swiftmodule/arm64e-apple-ios.swiftmodule /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/RNScreens-5WV00FH719KSF72AHEGX4RH9D.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/UIUtilities-ELT4RMHC28663R2XJCA1G0IWR.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_float-CJ1LGQKEOH30EMIKS7ZGX9GVJ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/SwiftUICore-L7GJMLUHRT6YRSCLR8VOGWTD.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/IOSurface-B19RF8EEO8C9GUYG2P1N32VQW.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_intrinsics-E1X72331CRJBVUIO8LB15OYF7.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Darwin-CKNM7JNKTUF2ZELB06ISE2XG2.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/FileProvider-4MU6WWZ0LJQ4S399FIPHOK4D4.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreTransferable-9154R9KPUBTIEGK62C8IGFDV1.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/OpenGLES-6GO3PJMKII8262S79M4UK9C1T.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreMIDI-3XU79LYS0QXAR45ZBWFZK9YPV.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CommonCrypto-F0F3A8NQ5X2KGNM9TB6ONRWJ3.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/DataDetection-CYM3RACD4Q982WWR1LRBYPTCT.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/MobileCoreServices-79HRK6R9T853WGOUNYJZEDV0Q.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/UniformTypeIdentifiers-B7Y457RKHMILUEDD2QFEYJAZ3.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/VideoToolbox-7SFG2TB9T8IA4G2FEDPMQ6SMS.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/dnssd-EH2EJVVF52XK2SJA9WW1OO1QJ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdbool-D6W65D390JE64FC6HRBF97IMA.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/ExpoModulesJSI-6S4F244RV3V201DN3BWVZYU9H.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/AVFAudio-1XCG85DB033LZVFVEK6L1DT7R.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CFNetwork-33X0WNGFEUBJX6FTEA61FDKWV.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreText-5P8LH83CLEPBDDIU1VEBC9J15.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/LocalAuthentication-BQ2PLXLNS8XCB0JW2C885Y6H1.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Dispatch-DB2B2UC2VXDI8Q0KBV7QNX40S.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreGraphics-6U6I14BZDUGG9LFADW5QUFGJ8.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stddef-9SN9334Y3ETMIZH18UIQYLRGH.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreAudioTypes-7CCAAXUEUS7U6WNU9IW3NZN29.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation2-9SQ8IX6PMG3Y4A4ZYGTGPWCDQ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdint-7H3L17C9N4YXGCLJ4ARV0BKKK.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/ExpoRouter-1OO0R9ANKJRBN2B5VSDQ8IYUO.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreSpotlight-9UH0JB7OA4HO0JA1E4SHMUX9C.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/AVRouting-CCMVPNFKM2AVBZA77C8RTGALP.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/MachO-342SNQ9FWX97CUXXO7C8VVQXM.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/UIKit-ARS4IWYA067JJ4WJRTGOYIPX9.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/OSLog-BKB3G4H9KIIBGP1ABRQ8DUMAU.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/ptrcheck-D2120FHX43N4CSI7BTKEWV7CJ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreLocation-BBWLFRIRPN6K7452F4VG4IJFG.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/JavaScriptCore-5ZRHG5CGWG0BBX79T0H2FCJ7Y.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/RCTDeprecation-BS69YJRCMCEYL278C4N8RRBWB.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/MediaToolbox-EO0V4ZCF1D5VNNDT1N5KQK5TM.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreMotion-7RY94UA8EAP9RSMRCLSNX4XQI.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_LocationEssentials-286Z9PF4TZFW0OCXTSIDT9XWG.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/os_object-7TZEQMHXDDK0EPVSPCOFTBEQP.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/simd-C2C5ONG105K7XFEE0FPAOSXBS.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_inttypes-DYHRFBRSYOV0ZIKQGDNHGUW1V.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Symbols-E74F15MSQ9IVM46E7TDVV343M.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Network-8K2UN5ARRGCFYVHMVBNVDHECP.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreData-F0MQXR7SZBALEDZSQH81AH2VT.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/QuartzCore-AHF56XY50TAFY98HJ0R7BNZ00.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/XPC-6I7M3ZVUSBSP2KKKBUAKIYK3D.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/DeveloperToolsSupport-3WNUZ2Y8IVD1HJMNKVIRVYWJQ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_AvailabilityInternal-CTBX5P8R2JXDI0526QYX74O2T.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/ImageIO-BIIJ7GTHQLVCM2RY6QXA5QNRC.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/SwiftShims-AUIL474XN76IUPVHX90F71FOY.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_limits-9JQD9JTF8IU1W3DL7XXLL4OL0.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/yoga-A3BGR23WRD4CZA3TG9VCV6TBA.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreAudio-6HMU11LIWLK5YQPFDW6I5CGPZ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/sys_types-EF472D0D8K8V0YW8BRQDF8A3Z.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/ExpoModulesCore-G7JE3ZGBU4FWKA57MG9ND6K2.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreMedia-BU2QBU7SHX59W2AFSGRLNVPPF.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreVideo-1VCX4ADQOYJABSBJSCATB2RCK.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules/React-9ZBZB7QZHDUMGWWAO3FUPTEQS.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/os_workgroup-4ETYGLFQDFF5XUJOEGPNU8QC.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Foundation-35SC7BPRRXZUXZZ8GS453RGEX.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation1-25RSZ43Q66BTK7LL0SCH8370X.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_SwiftConcurrencyShims-EJRM4TOV7PG9V4NULIZBQ5SR0.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Metal-73XB17JTPF1HOEIG6JS0W31OQ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Accessibility-1MA5R281E68QL9OH8NK0VXMKN.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Security-4X5BF5PGKMHWYENEUEN7BHF0J.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/AVFoundation-3TIVHG7AHI3II49LU5P9U2PDI.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Spatial-3T4ANLA9STZ335PU2S0PG0KAF.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_DarwinFoundation3-BLVJDGR1OYVE646NMB0VD8ZEC.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdarg-64BSDGY3JG7AW2AYLE1OKBFSL.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/ptrauth-25KYN5YVZHRSG7AG0QJ4SO4FN.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/SwiftUI-8568S1LMXQ5I8KOU0J8EWOOBE.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/string_h-C8OPU0I1EZX7V1N4SWPNGU1NI.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreFoundation-8BBOGMYZQF6SRWMUW6LRO0DE6.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/os-7FUBCOT3UF0PW2QM8055WD9L.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/AudioToolbox-EJ51NAKE84EYP6VTTNG83IAQH.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_stdatomic-EGP8I155ONV9SHTLOVP4OGHPU.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/AVKit-9CNZH4JVC707JIF144FLWOVKA.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/ObjectiveC-1SHRUILT4DOSNLJAQRUSP3XPQ.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/_Builtin_tgmath-53YIVCPDRPOMYOVEJNPJKOBCG.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreImage-EJDR3T1KPMZG6OVTZ69SW07ZG.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/UserNotifications-A5D5YV7EFUX7D09B9XQBX32IE.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/Accelerate-Q92CEY13IEU81A4VX6TR3VYV.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/SDKExplicitPrecompiledModules/CoreServices-8464LYEPV5A06G9DBS26X8UJO.pcm /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/Pods.build/Release-iphoneos/ExpoRouter.build/Objects-normal/arm64/ExpoRouter-dependencies-1.json (in target 'ExpoRouter' from project 'Pods')
-	Building workspace Multica with scheme Multica and configuration Release
-(3 failures)
-xcodebuild rc=65
+xcodebuild rc=0
 == git state ==
 origin	https://github.com/YYY-HUB-SYS/multica (fetch)
 origin	https://github.com/YYY-HUB-SYS/multica (push)
-8907c50 fix: set iOS deployment target 16.0 (expo-router 55 LinkPreview needs iOS 16+ subtitle API) + fix xcodebuild rc capture
+f4af95e ci: package diagnostics (run 38525243709)
+da5b710 ci: bump ALL deployment targets to 16.0 (Pods + App)
  M ci-diagnostics/FAILURE-REPORT.txt
+ M ci-diagnostics/availability-warnings.txt
  M ci-diagnostics/bump-pods-target.txt
+ M ci-diagnostics/package.txt
  M ci-diagnostics/pnpm-install.txt
  M ci-diagnostics/pod-install.txt
  M ci-diagnostics/runner-info.txt

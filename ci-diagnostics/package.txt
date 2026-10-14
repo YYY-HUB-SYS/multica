@@ -2,6 +2,6 @@
 build/DerivedData/Build/Products/Release-iphoneos/Multica.app
 == xcarchive candidates ==
 SELECTED_APP=build/DerivedData/Build/Products/Release-iphoneos/Multica.app
-app size:   0B
-binary size: 
-Info.plist MinimumOSVersion: File Doesn't Exist, Will Create: build/DerivedData/Build/Products/Release-iphoneos/Multica.app/Info.plist
+app size:  48M
+binary size: 28656632
+Info.plist MinimumOSVersion: 16.0

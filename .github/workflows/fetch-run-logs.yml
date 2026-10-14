@@ -1,0 +1,131 @@
+name: Fetch failed run logs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fetch-run-logs.yml'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Fetch logs of latest failed build-ipa runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          git config --global --add safe.directory "*" || true
+          R="$GITHUB_REPOSITORY"
+          API="https://api.github.com/repos/$R"
+          AUTH="Authorization: Bearer $GH_TOKEN"
+          ACC="Accept: application/vnd.github+json"
+          rm -rf fetched-logs && mkdir -p fetched-logs
+          IDS=$(curl -sL -H "$AUTH" -H "$ACC" "$API/actions/workflows/build-ipa.yml/runs?per_page=12" | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          for r in d.get('workflow_runs', []):
+              if r.get('conclusion') == 'failure':
+                  print(r['id'])
+          " | head -3)
+          echo "FAILED_RUN_IDS: $(echo $IDS | tr '\n' ' ')"
+          for RID in $IDS; do
+            D="fetched-logs/run-$RID"
+            mkdir -p "$D"
+            curl -sL -H "$AUTH" -H "$ACC" "$API/actions/runs/$RID" -o "$D/run-info.json"
+            python3 -c "
+          import json
+          d = json.load(open('$D/run-info.json'))
+          print('RUN', d.get('id'), d.get('head_sha'), d.get('created_at'), d.get('conclusion'))
+          print('TITLE', d.get('display_title'))
+          " > "$D/run-info.txt" 2>&1
+            # 每步结论：直接回答"哪一步挂了"
+            curl -sL -H "$AUTH" -H "$ACC" "$API/actions/runs/$RID/jobs" -o "$D/jobs.json"
+            python3 -c "
+          import json
+          d = json.load(open('$D/jobs.json'))
+          for j in d.get('jobs', []):
+              print('JOB', j.get('name'), '=>', j.get('conclusion'))
+              for s in j.get('steps', []):
+                  print('  step', s.get('number'), s.get('name'), '=>', s.get('conclusion'))
+          " > "$D/steps.txt" 2>&1
+            cat "$D/steps.txt"
+            # 完整日志 zip
+            CODE=$(curl -sL -w '%{http_code}' -H "$AUTH" -H "$ACC" "$API/actions/runs/$RID/logs" -o "/tmp/logs-$RID.zip")
+            echo "logs download http=$CODE size=$(wc -c < /tmp/logs-$RID.zip)"
+            if [ "$CODE" = "200" ] && unzip -o -q "/tmp/logs-$RID.zip" -d "$D/logs" 2>/dev/null; then
+              FAILED_STEP=$(python3 -c "
+          import json
+          d = json.load(open('$D/jobs.json'))
+          name = ''
+          for j in d.get('jobs', []):
+              for s in j.get('steps', []):
+                  if s.get('conclusion') == 'failure':
+                      name = s.get('name')
+                      print(name)
+                      raise SystemExit
+          ")
+              echo "FAILED_STEP=$FAILED_STEP" >> "$D/run-info.txt"
+              # 失败步骤日志全留；其余只留尾部，控制仓库体积
+              find "$D/logs" -type f | while read f; do
+                if [ -n "$FAILED_STEP" ] && printf '%s' "$f" | grep -qiF "$FAILED_STEP"; then
+                  SZ=$(wc -c < "$f")
+                  if [ "$SZ" -gt 3000000 ]; then
+                    head -c 500000 "$f" > "$f.part"
+                    printf '\n...[middle truncated, total %s bytes]...\n' "$SZ" >> "$f.part"
+                    tail -c 1000000 "$f" >> "$f.part"
+                    mv "$f.part" "$f"
+                  fi
+                else
+                  tail -c 40000 "$f" > "$f.part" && mv "$f.part" "$f"
+                fi
+              done
+              rm -f /tmp/logs-$RID.zip
+            else
+              echo "LOGS_DOWNLOAD_FAILED http=$CODE" >> "$D/run-info.txt"
+            fi
+            # artifacts（含 CI 落盘的 xcode-inventory / pnpm-install 等）
+            curl -sL -H "$AUTH" -H "$ACC" "$API/actions/runs/$RID/artifacts" -o "$D/artifacts.json"
+            python3 -c "
+          import json
+          d = json.load(open('$D/artifacts.json'))
+          for a in d.get('artifacts', []):
+              print(a['id'], a['name'], a.get('size_in_bytes'))
+          " > "$D/artifacts.txt" 2>&1
+            while read AID ANAME ASZ; do
+              [ -z "$AID" ] && continue
+              AC=$(curl -sL -w '%{http_code}' -H "$AUTH" -H "$ACC" "$API/actions/artifacts/$AID/zip" -o "$D/artifact-$ANAME.zip")
+              echo "artifact $ANAME http=$AC size=$(wc -c < "$D/artifact-$ANAME.zip" 2>/dev/null)"
+              if [ "$AC" != "200" ]; then rm -f "$D/artifact-$ANAME.zip"; fi
+            done < "$D/artifacts.txt"
+          done
+          # 汇总
+          { echo '# Fetched failure logs'; echo; echo 'runs:'; for RID in $IDS; do echo "- run-$RID:"; cat "fetched-logs/run-$RID/run-info.txt" | sed 's/^/    /'; sed 's/^/    /' "fetched-logs/run-$RID/steps.txt"; done; } > fetched-logs/SUMMARY.txt
+          # 提交回仓库（本地无鉴权读不了私有仓库日志，这是唯一通道）
+          cp -r fetched-logs /tmp/fl-backup
+          git add -f fetched-logs
+          if ! git commit -m "ci: fetched failure logs (runs $(echo $IDS | tr '\n' ' '))"; then
+            echo "commit-failed rc=$?"; git status --short | head -10
+          fi
+          for i in 1 2 3; do
+            if git push -q origin HEAD:main >/tmp/fpush.log 2>&1; then echo "PUSH_OK attempt=$i"; exit 0; fi
+            echo "push attempt $i failed: $(tail -3 /tmp/fpush.log | tr '\n' '|')"
+            git fetch -q origin main
+            git reset -q --hard FETCH_HEAD
+            rm -rf fetched-logs && cp -r /tmp/fl-backup fetched-logs
+            git add -f fetched-logs
+            git commit -m "ci: fetched failure logs" || true
+            sleep 5
+          done
+          echo "::error title=fetch-push-failed::$(tail -5 /tmp/fpush.log | tr '\n' '|')"
+          exit 1

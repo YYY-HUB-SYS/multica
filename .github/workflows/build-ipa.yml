@@ -16,8 +16,7 @@ jobs:
   build-ipa:
     # macos-26 镜像的 Xcode 26.0.1 缺 iOS platform 组件（GitHub 每镜像只预装 3 个
     # platform 版本，镜像更新后 26.0 被挤出），destination 匹配必挂。
-    # xcode-27 preview 镜像是新构建，platform 组件齐全，且 Xcode 27 >= 26.4 满足
-    # RN 0.86 / ExpoModulesJSI(Swift 6.2+) 的要求。
+    # xcode-27 preview 镜像是新构建，platform 组件齐全。
     runs-on: xcode-27
     timeout-minutes: 120
     permissions:
@@ -29,11 +28,41 @@ jobs:
           fetch-depth: 1
 
       - name: Prep diagnostics dir
-        run: mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
+        run: |
+          set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          mkdir -p "$GITHUB_WORKSPACE/ci-diagnostics"
+          echo "STEP-START checkout exit=0 $(date -u +%FT%TZ)" >> "$MARK"
+          { uname -a; sw_vers; xcodebuild -version 2>&1; echo "GITHUB_RUN_ID=$GITHUB_RUN_ID"; } >> "$GITHUB_WORKSPACE/ci-diagnostics/runner-info.txt" 2>&1
+
+      - name: Marker before Setup pnpm
+        run: echo "STEP-START setup-pnpm $(date -u +%FT%TZ)" >> "$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.28.2
+
+      - name: Marker after Setup pnpm
+        run: echo "STEP-END setup-pnpm exit=0 $(date -u +%FT%TZ)" >> "$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+
+      - name: Marker before Setup Node
+        run: echo "STEP-START setup-node $(date -u +%FT%TZ)" >> "$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Marker after Setup Node
+        run: echo "STEP-END setup-node exit=0 $(date -u +%FT%TZ)" >> "$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
 
       - name: Pin Xcode and verify iOS SDK
         run: |
           set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START pin-xcode $(date -u +%FT%TZ)" >> "$MARK"
           INV="$GITHUB_WORKSPACE/ci-diagnostics/xcode-inventory.txt"
           {
             echo "== Xcode apps =="
@@ -72,41 +101,26 @@ jobs:
           # 把镜像实况塞进 annotation（失败时页面上直接可见）
           INV_TXT=$(head -c 1200 "$INV" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g')
           echo "::notice title=xcode-inventory::$INV_TXT"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 10.28.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
+          echo "STEP-END pin-xcode exit=0 $(date -u +%FT%TZ)" >> "$MARK"
 
       - name: Install dependencies (workspace root)
         # 依赖清单（package.json + lock）已整体回退到 SDK 55 自洽状态，frozen 可用
         run: |
           set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START install $(date -u +%FT%TZ)" >> "$MARK"
           LOG="$GITHUB_WORKSPACE/ci-diagnostics/pnpm-install.txt"
           pnpm install > "$LOG" 2>&1
           code=$?
           tail -30 "$LOG"
           echo "pnpm install exit=$code"
           if [ "$code" -ne 0 ]; then
-            ERR=$(grep -nEi 'ERR_|error|conflict|not found|Incompatible|Unsupported' "$LOG" | tail -25 | tr '
-' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
+            echo "STEP-END install exit=$code $(date -u +%FT%TZ)" >> "$MARK"
+            ERR=$(grep -nEi 'ERR_|error|conflict|not found|Incompatible|Unsupported' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
             echo "::error title=pnpm-install-failed::$ERR"
-            cd "$GITHUB_WORKSPACE"
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -f ci-diagnostics || true
-            git commit -m "ci: pnpm install diagnostics (run ${GITHUB_RUN_ID})" || true
-            git push > /tmp/push.log 2>&1
-            echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '
-' '|' | sed 's/::/ -- /g' | cut -c1-400)"
             exit "$code"
           fi
+          echo "STEP-END install exit=0 $(date -u +%FT%TZ)" >> "$MARK"
           exit 0
 
       - name: Prebuild iOS project (generate native project only)
@@ -119,6 +133,8 @@ jobs:
           CI: true
         run: |
           set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START prebuild $(date -u +%FT%TZ)" >> "$MARK"
           cd apps/mobile
           if [ ! -f .env.production.local ]; then
             cp .env.production.example .env.production.local 2>/dev/null || true
@@ -131,17 +147,12 @@ jobs:
           head -20 ios/Podfile 2>/dev/null
           echo "prebuild exit=$code"
           if [ "$code" -ne 0 ]; then
+            echo "STEP-END prebuild exit=$code $(date -u +%FT%TZ)" >> "$MARK"
             ERR=$(grep -nEi 'error|invalid|must be|requires|minimum|supported' "$LOG" | tail -20 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
             echo "::error title=prebuild-failed::$ERR"
-            cd "$GITHUB_WORKSPACE"
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -f ci-diagnostics || true
-            git commit -m "ci: prebuild diagnostics (run ${GITHUB_RUN_ID})" || true
-            git push > /tmp/push.log 2>&1
-            echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-400)"
             exit "$code"
           fi
+          echo "STEP-END prebuild exit=0 $(date -u +%FT%TZ)" >> "$MARK"
           exit 0
 
       - name: Install CocoaPods dependencies (with diagnostics)
@@ -150,6 +161,8 @@ jobs:
           LOG_NAME: pod-install.txt
         run: |
           set +e   # 关闭 bash -e，否则失败会直接中止，诊断代码永远执行不到
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START pod-install $(date -u +%FT%TZ)" >> "$MARK"
           cd apps/mobile/ios
           LOG="$GITHUB_WORKSPACE/ci-diagnostics/pod-install.txt"
           {
@@ -168,19 +181,14 @@ jobs:
           cat "$LOG"
           if [ -d Pods ]; then
             echo "pods OK"
+            echo "STEP-END pod-install exit=0 $(date -u +%FT%TZ)" >> "$MARK"
             exit 0
           fi
+          echo "STEP-END pod-install exit=1 $(date -u +%FT%TZ)" >> "$MARK"
           ERR=$(grep -nEi 'error|fatal|failed|exception|not found|no such|cannot|unable to|exit=' "$LOG" | grep -v 'Enabling modular headers' | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
           echo "::error title=pod-error-lines::$ERR"
-          LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
+          LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-900)
           echo "::error title=pod-last-lines::$LAST"
-          cd "$GITHUB_WORKSPACE"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f ci-diagnostics || true
-          git commit -m "ci: pod install diagnostics (run ${GITHUB_RUN_ID})" || true
-          git push > /tmp/push.log 2>&1
-          echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-400)"
           exit 1
 
       - name: Upload pods diagnostics
@@ -196,10 +204,13 @@ jobs:
           LOG_NAME: xcodebuild.txt
         run: |
           set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START xcodebuild $(date -u +%FT%TZ)" >> "$MARK"
           cd apps/mobile/ios
           LOG="$GITHUB_WORKSPACE/ci-diagnostics/xcodebuild.txt"
           WORKSPACE=$(ls -d *.xcworkspace 2>/dev/null | head -1)
           if [ -z "$WORKSPACE" ]; then
+            echo "STEP-END xcodebuild exit=1 $(date -u +%FT%TZ)" >> "$MARK"
             echo "::error title=workspace-not-found::ios dir listing: $(ls | tr '\n' '|' | cut -c1-600)"
             exit 1
           fi
@@ -213,6 +224,7 @@ jobs:
           SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path 2>/dev/null)
           echo "SDK_PATH=$SDK_PATH"
           if [ -z "$SDK_PATH" ]; then
+            echo "STEP-END xcodebuild exit=1 $(date -u +%FT%TZ)" >> "$MARK"
             echo "::error title=iphoneos-sdk-missing::xcrun cannot find iphoneos SDK. Xcode=$(xcodebuild -version 2>&1 | tr '\n' '|')"
             exit 1
           fi
@@ -233,22 +245,17 @@ jobs:
           } > "$LOG" 2>&1
           tail -40 "$LOG"
           if ! grep -q "xcodebuild exit=0" "$LOG"; then
+            echo "STEP-END xcodebuild exit=1 $(date -u +%FT%TZ)" >> "$MARK"
             ERR=$(grep -nEi 'error:|fatal|failed|not found|no such|cannot|unable to|exit=|BUILD' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
             echo "::error title=xcode-error-lines::$ERR"
-            LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-900)
+            LAST=$(tail -12 "$LOG" | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-900)
             echo "::error title=xcode-last-lines::$LAST"
-            cd "$GITHUB_WORKSPACE"
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -f ci-diagnostics || true
-            git commit -m "ci: xcodebuild diagnostics (run ${GITHUB_RUN_ID})" || true
-            git push > /tmp/push.log 2>&1
-            echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '\n' '|' | sed 's/::/ -- /g' | cut -c1-400)"
             exit 1
           fi
           # 记录是否有"仅更高版本可用"的 API 被使用（运行期崩溃风险信号）
           grep -iE "is only available in iOS|only available on iOS" "$LOG" | sort -u | head -20 > "$GITHUB_WORKSPACE/ci-diagnostics/availability-warnings.txt" || true
           echo "::notice title=availability-warnings-count::$(wc -l < "$GITHUB_WORKSPACE/ci-diagnostics/availability-warnings.txt")"
+          echo "STEP-END xcodebuild exit=0 $(date -u +%FT%TZ)" >> "$MARK"
           exit 0
 
       - name: Upload xcodebuild diagnostics
@@ -262,6 +269,8 @@ jobs:
       - name: Package unsigned .ipa
         run: |
           set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START package $(date -u +%FT%TZ)" >> "$MARK"
           cd apps/mobile
           # archive 路线的产物在 xcarchive 里；build 路线在 DerivedData 里。两者都找。
           APP_PATH=$(ls -d build/Multica.xcarchive/Products/Applications/*.app 2>/dev/null | head -1)
@@ -270,6 +279,7 @@ jobs:
           fi
           echo "APP_PATH=$APP_PATH"
           if [ -z "$APP_PATH" ] || [ ! -d "$APP_PATH" ]; then
+            echo "STEP-END package exit=1 $(date -u +%FT%TZ)" >> "$MARK"
             echo "::error title=no-app-found::xcarchive/DerivedData both empty. build dir: $(ls build 2>/dev/null | tr '\n' '|')"
             exit 1
           fi
@@ -280,6 +290,7 @@ jobs:
           zip -qr Multica-unsigned.ipa Payload
           ls -lh Multica-unsigned.ipa
           /usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "../$APP_PATH/Info.plist" || true
+          echo "STEP-END package exit=0 $(date -u +%FT%TZ)" >> "$MARK"
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
@@ -287,3 +298,46 @@ jobs:
           name: Multica-unsigned-ipa
           path: apps/mobile/build/Multica-unsigned.ipa
           if-no-files-found: error
+
+      - name: Push diagnostics on failure (catch-all)
+        # 任何步骤失败都走这里：汇总 steps 标记 + 各日志尾部 + 仓库实况，
+        # commit 回 main（本地无登录态读不了私有仓库的 Actions 页面，这是唯一通道）。
+        # safe.directory + fetch/retry 防止新镜像上 git 静默失败。
+        if: failure()
+        run: |
+          set +e
+          git config --global --add safe.directory "*" || true
+          cd "$GITHUB_WORKSPACE"
+          cp -r ci-diagnostics /tmp/diag-backup 2>/dev/null
+          {
+            echo "# Failure report run=${GITHUB_RUN_ID} commit=$(git rev-parse HEAD 2>/dev/null)"
+            echo "== step markers (last START without END = failing step) =="
+            cat ci-diagnostics/steps.txt 2>/dev/null
+            echo "== runner info =="
+            cat ci-diagnostics/runner-info.txt 2>/dev/null
+            echo "== log tails =="
+            for f in ci-diagnostics/*.txt; do echo "--- $f ---"; tail -60 "$f" 2>/dev/null; done
+            echo "== git state =="
+            git remote -v 2>&1 | head -2
+            git log --oneline -3 2>&1
+            git status --short 2>&1 | head -10
+          } > ci-diagnostics/FAILURE-REPORT.txt 2>&1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-diagnostics
+          if ! git commit -m "ci: diagnostics (run ${GITHUB_RUN_ID})"; then
+            echo "COMMIT_FAILED rc=$? status=$(git status --short | head -5 | tr '\n' '|')"
+            echo "::error title=diag-commit-failed::rc=$? status=$(git status --short | head -5 | tr '\n' '|')"
+          fi
+          for i in 1 2 3; do
+            if git push -q origin HEAD:main >/tmp/diagpush.log 2>&1; then echo "DIAG_PUSH_OK attempt=$i"; exit 0; fi
+            echo "diag push attempt $i failed: $(tail -3 /tmp/diagpush.log | tr '\n' '|')"
+            git fetch -q origin main
+            git reset -q --hard FETCH_HEAD
+            rm -rf ci-diagnostics && cp -r /tmp/diag-backup ci-diagnostics
+            git add -f ci-diagnostics
+            git commit -m "ci: diagnostics (run ${GITHUB_RUN_ID})" || true
+            sleep 5
+          done
+          echo "::error title=diag-push-failed::$(tail -5 /tmp/diagpush.log | tr '\n' '|')"
+          exit 1

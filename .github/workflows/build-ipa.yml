@@ -191,6 +191,33 @@ jobs:
           echo "::error title=pod-last-lines::$LAST"
           exit 1
 
+      - name: Bump Pods deployment targets to >= 15.0
+        # Xcode 27 强制所有 target 的 IPHONEOS_DEPLOYMENT_TARGET >= 15.0，
+        # 而 RNSVG-RNSVGFilters(12.4) / SDWebImage(9.0) / iosMath(6.0) 等老
+        # subspec 声明过低，xcodebuild 直接 BUILD FAILED（exit 65）。
+        # 这些库本身支持 iOS 15，抬升部署目标只是编译期标记，不改任何源码。
+        run: |
+          set +e
+          MARK="$GITHUB_WORKSPACE/ci-diagnostics/steps.txt"
+          echo "STEP-START bump-pods-target $(date -u +%FT%TZ)" >> "$MARK"
+          cd apps/mobile/ios
+          PBX="Pods/Pods.xcodeproj/project.pbxproj"
+          if [ ! -f "$PBX" ]; then
+            echo "::error title=pbxproj-missing::$PBX not found after pod install"
+            echo "STEP-END bump-pods-target exit=1 $(date -u +%FT%TZ)" >> "$MARK"
+            exit 1
+          fi
+          {
+            echo "== deployment targets before =="
+            grep -oE 'IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+' "$PBX" | sort | uniq -c
+            # 一次性把所有 <15.0 的抬到 15.0
+            perl -i -pe 's/IPHONEOS_DEPLOYMENT_TARGET = ([\d.]+)/"IPHONEOS_DEPLOYMENT_TARGET = ".($1 < 15.0 ? "15.0" : $1)/ge' "$PBX"
+            echo "== deployment targets after =="
+            grep -oE 'IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+' "$PBX" | sort | uniq -c
+          } >> "$GITHUB_WORKSPACE/ci-diagnostics/bump-pods-target.txt" 2>&1
+          cat "$GITHUB_WORKSPACE/ci-diagnostics/bump-pods-target.txt"
+          echo "STEP-END bump-pods-target exit=0 $(date -u +%FT%TZ)" >> "$MARK"
+
       - name: Upload pods diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
@@ -243,8 +270,11 @@ jobs:
               build
             echo "xcodebuild exit=$?"
           } > "$LOG" 2>&1
+          XC_RC=$?
           tail -40 "$LOG"
-          if ! grep -q "xcodebuild exit=0" "$LOG"; then
+          echo "xcodebuild rc=$XC_RC"
+          echo "xcodebuild rc=$XC_RC" >> "$LOG"
+          if [ "$XC_RC" -ne 0 ]; then
             echo "STEP-END xcodebuild exit=1 $(date -u +%FT%TZ)" >> "$MARK"
             ERR=$(grep -nEi 'error:|fatal|failed|not found|no such|cannot|unable to|exit=|BUILD' "$LOG" | tail -25 | tr '\n' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
             echo "::error title=xcode-error-lines::$ERR"

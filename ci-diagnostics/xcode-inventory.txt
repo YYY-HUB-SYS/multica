@@ -158,7 +158,7 @@ iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
 tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
 watchOS 27.0 (27.0 - 24R362) - com.apple.CoreSimulator.SimRuntime.watchOS-27-0
 visionOS 27.0 (27.0 - 24M362) - com.apple.CoreSimulator.SimRuntime.xrOS-27-0
-/Users/runner/work/_temp/f5eb6780-1db3-405a-b8fc-b253631535f0.sh: line 35: timeout: command not found
+/Users/runner/work/_temp/78060a93-e57b-41fc-bf33-a4ce15639ff6.sh: line 35: timeout: command not found
 downloadPlatform exit=0
 DriverKit SDKs:
 	DriverKit 27.0                	-sdk driverkit27.0

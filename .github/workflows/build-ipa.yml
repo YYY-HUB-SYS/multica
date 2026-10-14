@@ -85,53 +85,15 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies (workspace root)
-        run: pnpm install
-
-      - name: Lower Expo minimal iOS deployment target check
-        # 目标设备 iOS 16.2 低于 SDK 57 官方基线 16.4。
-        # 只改 expo-build-properties 里的"最低版本常量"（16.4 -> 16.0），
-        # 不改任何校验逻辑/其它字段，范围可控。
-        run: |
-          set +e
-          F=$(find "$GITHUB_WORKSPACE/node_modules/.pnpm" -path "*expo-build-properties*/build/pluginConfig.js" | head -1)
-          if [ -z "$F" ]; then
-            F=$(find "$GITHUB_WORKSPACE" -path "*expo-build-properties*/build/pluginConfig.js" -not -path "*/ci-diagnostics/*" | head -1)
-          fi
-          echo "plugin file: $F"
-          echo "$F" > "$GITHUB_WORKSPACE/ci-diagnostics/patched-file.txt"
-          if [ -z "$F" ]; then
-            echo "::error title=patch-target-not-found::expo-build-properties pluginConfig.js not found"
-            exit 1
-          fi
-          perl -pi -e "s/deploymentTarget: '16\.4',/deploymentTarget: '16.0',/" "$F"
-          grep -n "deploymentTarget: '" "$F" | head -3
-          if ! grep -q "deploymentTarget: '16.0'," "$F"; then
-            echo "::error title=patch-failed::constant 16.4 not replaced"
-            exit 1
-          fi
-          echo "patched OK"
-
-      - name: Patch all podspecs 16.4 -> 16.2 (Expo autolinking platform check)
-        # pod install 会逐个检查模块 podspec 的平台要求（16.4），
-        # 不统一放行则模块被 "not linked"。这里把 node_modules 里所有
-        # podspec 的 "16.4" 平台声明改成 16.2（仅编译目标声明）。
-        run: |
-          set +e
-          count_before=$(grep -rl "16.4" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | wc -l)
-          find "$GITHUB_WORKSPACE/apps/mobile/node_modules" -name "*.podspec*" -print0 2>/dev/null | xargs -0 perl -pi -e 's/16\.4/16.2/g' 2>/dev/null
-          find "$GITHUB_WORKSPACE/node_modules/.pnpm" -name "*.podspec*" -print0 2>/dev/null | xargs -0 perl -pi -e 's/16\.4/16.2/g' 2>/dev/null
-          count_after=$(grep -rl "16.2" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | wc -l)
-          echo "podspec patch: before=$count_before after16.2=$count_after"
-          echo "::notice title=podspec-patch::before=$count_before after16.2=$count_after"
-          left=$(grep -rl "16.4" "$GITHUB_WORKSPACE/apps/mobile/node_modules" 2>/dev/null | head -5)
-          if [ -n "$left" ]; then
-            echo "::warning title=podspec-16.4-left::$left"
-          fi
+        # lock 是 SDK 57 时代的，mobile 已回退 SDK 55（package.json 与 lock 不匹配），
+        # frozen-lockfile 会直接 ERR_PNPM_OUTDATED_LOCKFILE，允许重新解析。
+        run: pnpm install --no-frozen-lockfile
 
       - name: Prebuild iOS project (generate native project only)
         env:
           APP_ENV: production
-          EXPO_BUNDLE_IDENTIFIER_PROD: com.yourname.multica
+          EXPO_PUBLIC_API_URL: https://api.multica.ai
+          EXPO_PUBLIC_WEB_URL: https://multica.ai
           EXPO_NO_DOCTOR: 1
           EXPO_NO_TELEMETRY: 1
           CI: true

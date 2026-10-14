@@ -37,7 +37,8 @@ import {
   Platform,
   View,
 } from "react-native";
-import { router, useFocusEffect, useIsFocused } from "expo-router";
+import { router } from "expo-router";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   Agent,

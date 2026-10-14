@@ -85,9 +85,29 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies (workspace root)
-        # lock 是 SDK 57 时代的，mobile 已回退 SDK 55（package.json 与 lock 不匹配），
-        # frozen-lockfile 会直接 ERR_PNPM_OUTDATED_LOCKFILE，允许重新解析。
-        run: pnpm install --no-frozen-lockfile
+        # 依赖清单（package.json + lock）已整体回退到 SDK 55 自洽状态，frozen 可用
+        run: |
+          set +e
+          LOG="$GITHUB_WORKSPACE/ci-diagnostics/pnpm-install.txt"
+          pnpm install > "$LOG" 2>&1
+          code=$?
+          tail -30 "$LOG"
+          echo "pnpm install exit=$code"
+          if [ "$code" -ne 0 ]; then
+            ERR=$(grep -nEi 'ERR_|error|conflict|not found|Incompatible|Unsupported' "$LOG" | tail -25 | tr '
+' '|' | sed 's/::/ -- /g; s/%/%25/g' | cut -c1-1400)
+            echo "::error title=pnpm-install-failed::$ERR"
+            cd "$GITHUB_WORKSPACE"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -f ci-diagnostics || true
+            git commit -m "ci: pnpm install diagnostics (run ${GITHUB_RUN_ID})" || true
+            git push > /tmp/push.log 2>&1
+            echo "::error title=diag-push-result::exit=$? :: $(tail -3 /tmp/push.log | tr '
+' '|' | sed 's/::/ -- /g' | cut -c1-400)"
+            exit "$code"
+          fi
+          exit 0
 
       - name: Prebuild iOS project (generate native project only)
         env:

@@ -1,0 +1,193 @@
+== Xcode apps ==
+Xcode_27.0.0.app
+Xcode_27.0.app
+Xcode_27.1_beta.app
+Xcode_27.1.0.app
+Xcode_27.1.app
+Xcode_27.2_beta_2.app
+Xcode_27.2.0.app
+Xcode_27.2.app
+Xcode_27.app
+Xcode.app
+== Platforms dir ==
+-- /Applications/Xcode_27.0.0.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.0.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.1_beta.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.1.0.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.1.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.2_beta_2.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.2.0.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.2.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode_27.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+-- /Applications/Xcode.app
+AppleTVOS.platform
+AppleTVSimulator.platform
+DriverKit.platform
+iPhoneOS.platform
+iPhoneSimulator.platform
+MacOSX.platform
+WatchOS.platform
+WatchSimulator.platform
+XROS.platform
+XRSimulator.platform
+== showsdks ==
+DriverKit SDKs:
+	DriverKit 27.0                	-sdk driverkit27.0
+
+iOS SDKs:
+	iOS 27.0                      	-sdk iphoneos27.0
+
+iOS Simulator SDKs:
+	Simulator - iOS 27.0          	-sdk iphonesimulator27.0
+
+macOS SDKs:
+	macOS 27.0                    	-sdk macosx27.0
+	macOS 27.0                    	-sdk macosx27.0
+
+tvOS SDKs:
+	tvOS 27.0                     	-sdk appletvos27.0
+
+tvOS Simulator SDKs:
+	Simulator - tvOS 27.0         	-sdk appletvsimulator27.0
+
+visionOS SDKs:
+	visionOS 27.0                 	-sdk xros27.0
+
+visionOS Simulator SDKs:
+	Simulator - visionOS 27.0     	-sdk xrsimulator27.0
+
+watchOS SDKs:
+	watchOS 27.0                  	-sdk watchos27.0
+
+watchOS Simulator SDKs:
+	Simulator - watchOS 27.0      	-sdk watchsimulator27.0
+
+== simctl runtimes ==
+== Runtimes ==
+iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
+tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
+watchOS 27.0 (27.0 - 24R362) - com.apple.CoreSimulator.SimRuntime.watchOS-27-0
+visionOS 27.0 (27.0 - 24M362) - com.apple.CoreSimulator.SimRuntime.xrOS-27-0
+/Users/runner/work/_temp/f5eb6780-1db3-405a-b8fc-b253631535f0.sh: line 35: timeout: command not found
+downloadPlatform exit=0
+DriverKit SDKs:
+	DriverKit 27.0                	-sdk driverkit27.0
+
+iOS SDKs:
+	iOS 27.0                      	-sdk iphoneos27.0
+
+iOS Simulator SDKs:
+	Simulator - iOS 27.0          	-sdk iphonesimulator27.0
+
+macOS SDKs:
+	macOS 27.0                    	-sdk macosx27.0
+	macOS 27.0                    	-sdk macosx27.0
+
+tvOS SDKs:
+	tvOS 27.0                     	-sdk appletvos27.0
+
+tvOS Simulator SDKs:
+	Simulator - tvOS 27.0         	-sdk appletvsimulator27.0
+
+visionOS SDKs:
+	visionOS 27.0                 	-sdk xros27.0
+
+visionOS Simulator SDKs:
+	Simulator - visionOS 27.0     	-sdk xrsimulator27.0
+
+watchOS SDKs:
+	watchOS 27.0                  	-sdk watchos27.0
+
+watchOS Simulator SDKs:
+	Simulator - watchOS 27.0      	-sdk watchsimulator27.0
+

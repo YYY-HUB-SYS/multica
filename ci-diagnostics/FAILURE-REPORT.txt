@@ -1,0 +1,342 @@
+# Failure report run=38491647391 commit=62fc824745ad58bea48ea2fafdd67ab297106200
+== step markers (last START without END = failing step) ==
+STEP-START checkout exit=0 2026-10-14T00:42:23Z
+STEP-START setup-pnpm 2026-10-14T00:42:24Z
+STEP-END setup-pnpm exit=0 2026-10-14T00:42:32Z
+STEP-START setup-node 2026-10-14T00:42:32Z
+STEP-END setup-node exit=0 2026-10-14T00:42:34Z
+STEP-START pin-xcode 2026-10-14T00:42:34Z
+STEP-END pin-xcode exit=0 2026-10-14T00:42:44Z
+STEP-START install 2026-10-14T00:42:44Z
+STEP-END install exit=0 2026-10-14T00:44:25Z
+STEP-START prebuild 2026-10-14T00:44:25Z
+STEP-END prebuild exit=0 2026-10-14T00:44:28Z
+STEP-START pod-install 2026-10-14T00:44:28Z
+STEP-END pod-install exit=0 2026-10-14T00:45:45Z
+STEP-START xcodebuild 2026-10-14T00:45:45Z
+STEP-END xcodebuild exit=1 2026-10-14T00:46:07Z
+== runner info ==
+Darwin sat12-bq160-b9f1bb6c-72d4-4414-b0bd-c44e2df0a60a-BEB7FDF41848.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38491647391
+== log tails ==
+--- ci-diagnostics/FAILURE-REPORT.txt ---
+# Failure report run=38491647391 commit=62fc824745ad58bea48ea2fafdd67ab297106200
+== step markers (last START without END = failing step) ==
+STEP-START checkout exit=0 2026-10-14T00:42:23Z
+STEP-START setup-pnpm 2026-10-14T00:42:24Z
+STEP-END setup-pnpm exit=0 2026-10-14T00:42:32Z
+STEP-START setup-node 2026-10-14T00:42:32Z
+STEP-END setup-node exit=0 2026-10-14T00:42:34Z
+STEP-START pin-xcode 2026-10-14T00:42:34Z
+STEP-END pin-xcode exit=0 2026-10-14T00:42:44Z
+STEP-START install 2026-10-14T00:42:44Z
+STEP-END install exit=0 2026-10-14T00:44:25Z
+STEP-START prebuild 2026-10-14T00:44:25Z
+STEP-END prebuild exit=0 2026-10-14T00:44:28Z
+STEP-START pod-install 2026-10-14T00:44:28Z
+STEP-END pod-install exit=0 2026-10-14T00:45:45Z
+STEP-START xcodebuild 2026-10-14T00:45:45Z
+STEP-END xcodebuild exit=1 2026-10-14T00:46:07Z
+== runner info ==
+Darwin sat12-bq160-b9f1bb6c-72d4-4414-b0bd-c44e2df0a60a-BEB7FDF41848.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38491647391
+== log tails ==
+--- ci-diagnostics/FAILURE-REPORT.txt ---
+--- ci-diagnostics/patched-file.txt ---
+/Users/runner/work/multica/multica/node_modules/.pnpm/expo-build-properties@57.0.22_expo@57.0.27/node_modules/expo-build-properties/build/pluginConfig.js
+--- ci-diagnostics/pnpm-install.txt ---
+Progress: resolved 2038, reused 0, downloaded 1985, added 1282
+Progress: resolved 2038, reused 0, downloaded 1985, added 1293
+Progress: resolved 2038, reused 0, downloaded 1985, added 1309
+Progress: resolved 2038, reused 0, downloaded 1985, added 1350
+Progress: resolved 2038, reused 0, downloaded 1985, added 1442
+Progress: resolved 2038, reused 0, downloaded 1985, added 1483
+Progress: resolved 2038, reused 0, downloaded 1985, added 1537
+Progress: resolved 2038, reused 0, downloaded 1985, added 1559
+Progress: resolved 2038, reused 0, downloaded 1985, added 1693
+Progress: resolved 2038, reused 0, downloaded 1985, added 1720
+Progress: resolved 2038, reused 0, downloaded 1985, added 1753
+Progress: resolved 2038, reused 0, downloaded 1985, added 1754
+Progress: resolved 2038, reused 0, downloaded 1985, added 1770
+Progress: resolved 2038, reused 0, downloaded 1985, added 1773
+Progress: resolved 2038, reused 0, downloaded 1985, added 1776
+Progress: resolved 2038, reused 0, downloaded 1985, added 1777
+Progress: resolved 2038, reused 0, downloaded 1985, added 1814
+Progress: resolved 2038, reused 0, downloaded 1985, added 1856
+Progress: resolved 2038, reused 0, downloaded 1985, added 1917
+Progress: resolved 2038, reused 0, downloaded 1985, added 2021
+Progress: resolved 2038, reused 0, downloaded 1985, added 2038, done
+.../node_modules/electron postinstall$ node install.js
+.../esbuild@0.25.12/node_modules/esbuild postinstall$ node install.js
+.../esbuild@0.25.12/node_modules/esbuild postinstall: Done
+.../node_modules/electron postinstall: Done
+
+devDependencies:
++ @playwright/test 1.58.2
++ @types/node 25.5.0
++ @types/pg 8.20.0
++ knip 6.32.2
++ pg 8.20.0
++ turbo 2.9.5
++ typescript 5.9.3
+
+apps/docs postinstall$ fumadocs-mdx
+apps/docs postinstall: [MDX] types generated
+apps/docs postinstall: Done
+apps/desktop postinstall$ electron-builder install-app-deps
+apps/web postinstall$ fumadocs-mdx
+apps/web postinstall: [MDX] types generated
+apps/web postinstall: Done
+apps/desktop postinstall:   • electron-builder  version=26.8.1
+apps/desktop postinstall:   • loaded configuration  file=/Users/runner/work/multica/multica/apps/desktop/electron-builder.yml
+apps/desktop postinstall:   • packageManager not detected by file, falling back to environment detection  resolvedPackageManager=pnpm detected=/Users/runner/work/multica/multica/apps/desktop
+apps/desktop postinstall:   • detected workspace root for project using packageManager field  pm=pnpm config=pnpm@10.28.2 resolved=/Users/runner/work/multica/multica projectDir=/Users/runner/work/multica/multica/apps/desktop
+apps/desktop postinstall:   • executing @electron/rebuild  electronVersion=39.8.7 arch=arm64 buildFromSource=false workspaceRoot=/Users/runner/work/multica/multica projectDir=./ appDir=./
+apps/desktop postinstall:   • installing native dependencies  arch=arm64
+apps/desktop postinstall:   • completed installing native dependencies
+apps/desktop postinstall: Done
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: core-js@3.49.0, electron-winstaller@5.4.0,          │
+│   msw@2.12.14, protobufjs@7.5.5, sharp@0.34.5, unicode-animations@1.0.3,     │
+│   unrs-resolver@1.12.0.                                                      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 1m 40.8s using pnpm v10.28.2
+--- ci-diagnostics/pod-install.txt ---
+Installing SDWebImageAVIFCoder (0.11.1)
+Installing SDWebImageSVGCoder (1.7.0)
+Installing SDWebImageWebPCoder (0.14.6)
+Installing SocketRocket (0.7.1)
+Installing Yoga (0.0.0)
+Installing boost (1.84.0)
+Installing expo-dev-client (55.0.34)
+Installing expo-dev-launcher (55.0.35)
+Installing expo-dev-menu (55.0.29)
+Installing expo-dev-menu-interface (55.0.2)
+Installing fast_float (8.0.0)
+Installing fmt (12.1.0)
+Installing glog (0.3.5)
+Installing hermes-engine (0.14.1)
+Installing iosMath (0.9.4)
+Installing libavif (1.0.0)
+Installing libdav1d (1.2.0)
+Installing libwebp (1.6.0)
+Installing react-native-keyboard-controller (1.20.7)
+Installing react-native-netinfo (11.5.2)
+Installing react-native-safe-area-context (5.6.2)
+Installing react-native-segmented-control (2.5.7)
+Installing react-native-shiki-engine (0.3.10)
+Generating Pods project
+Setting USE_HERMES build settings
+Setting REACT_NATIVE_PATH build settings
+Setting SWIFT_ACTIVE_COMPILATION_CONDITIONS build settings
+[Ccache]: Removing Ccache from CC, LD, CXX & LDPLUSPLUS build settings
+[SPM] Cleaning old SPM dependencies from Pods project
+[SPM] Adding SPM dependencies to Pods project
+[Privacy Manifest Aggregation] No existing PrivacyInfo.xcprivacy file found, creating a new one.
+[Privacy Manifest Aggregation] Reading .xcprivacy files to aggregate all used Required Reason APIs.
+file_root: Multica
+Setting CLANG_CXX_LANGUAGE_STANDARD to c++20 on /Users/runner/work/multica/multica/apps/mobile/ios/Multica.xcodeproj
+
+==================== DEPRECATION NOTICE =====================
+Calling `pod install` directly is deprecated in React Native
+because we are moving away from Cocoapods toward alternative
+solutions to build the project.
+* If you are using Expo, please run:
+`npx expo run:ios`
+* If you are using the Community CLI, please run:
+`yarn ios`
+=============================================================
+
+Pod install took 68 [s] to run
+Integrating client project
+
+[!] Please close any current Xcode sessions and use `Multica.xcworkspace` for this project from now on.
+[Expo] Installing the build script for target Multica
+Pod installation complete! There are 120 dependencies from the Podfile and 128 total pods installed.
+[Expo] Adding '[Expo Autolinking] Run Codegen with autolinking' build phase to ReactCodegen
+
+[!] hermes-engine has added 1 script phase. Please inspect before executing a build. See `https://guides.cocoapods.org/syntax/podspec.html#script_phases` for more information.
+pod install exit=0
+boost
+DoubleConversion
+fast_float
+fmt
+glog
+--- ci-diagnostics/prebuild.txt ---
+- Creating native directory (./ios)
+✔ Created native directory
+- Updating package.json
+✔ Updated package.json | no changes
+- Running prebuild
+✔ Finished prebuild
+--- ci-diagnostics/runner-info.txt ---
+Darwin sat12-bq160-b9f1bb6c-72d4-4414-b0bd-c44e2df0a60a-BEB7FDF41848.local 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:00:07 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_VMAPPLE arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.0
+Build version 27A266a
+GITHUB_RUN_ID=38491647391
+--- ci-diagnostics/steps.txt ---
+STEP-START checkout exit=0 2026-10-14T00:42:23Z
+STEP-START setup-pnpm 2026-10-14T00:42:24Z
+STEP-END setup-pnpm exit=0 2026-10-14T00:42:32Z
+STEP-START setup-node 2026-10-14T00:42:32Z
+STEP-END setup-node exit=0 2026-10-14T00:42:34Z
+STEP-START pin-xcode 2026-10-14T00:42:34Z
+STEP-END pin-xcode exit=0 2026-10-14T00:42:44Z
+STEP-START install 2026-10-14T00:42:44Z
+STEP-END install exit=0 2026-10-14T00:44:25Z
+STEP-START prebuild 2026-10-14T00:44:25Z
+STEP-END prebuild exit=0 2026-10-14T00:44:28Z
+STEP-START pod-install 2026-10-14T00:44:28Z
+STEP-END pod-install exit=0 2026-10-14T00:45:45Z
+STEP-START xcodebuild 2026-10-14T00:45:45Z
+STEP-END xcodebuild exit=1 2026-10-14T00:46:07Z
+--- ci-diagnostics/xcode-inventory.txt ---
+	macOS 27.0                    	-sdk macosx27.0
+	macOS 27.0                    	-sdk macosx27.0
+
+tvOS SDKs:
+	tvOS 27.0                     	-sdk appletvos27.0
+
+tvOS Simulator SDKs:
+	Simulator - tvOS 27.0         	-sdk appletvsimulator27.0
+
+visionOS SDKs:
+	visionOS 27.0                 	-sdk xros27.0
+
+visionOS Simulator SDKs:
+	Simulator - visionOS 27.0     	-sdk xrsimulator27.0
+
+watchOS SDKs:
+	watchOS 27.0                  	-sdk watchos27.0
+
+watchOS Simulator SDKs:
+	Simulator - watchOS 27.0      	-sdk watchsimulator27.0
+
+== simctl runtimes ==
+== Runtimes ==
+iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
+tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
+watchOS 27.0 (27.0 - 24R362) - com.apple.CoreSimulator.SimRuntime.watchOS-27-0
+visionOS 27.0 (27.0 - 24M362) - com.apple.CoreSimulator.SimRuntime.xrOS-27-0
+/Users/runner/work/_temp/f5eb6780-1db3-405a-b8fc-b253631535f0.sh: line 35: timeout: command not found
+downloadPlatform exit=0
+DriverKit SDKs:
+	DriverKit 27.0                	-sdk driverkit27.0
+
+iOS SDKs:
+	iOS 27.0                      	-sdk iphoneos27.0
+
+iOS Simulator SDKs:
+	Simulator - iOS 27.0          	-sdk iphonesimulator27.0
+
+macOS SDKs:
+	macOS 27.0                    	-sdk macosx27.0
+	macOS 27.0                    	-sdk macosx27.0
+
+tvOS SDKs:
+	tvOS 27.0                     	-sdk appletvos27.0
+
+tvOS Simulator SDKs:
+	Simulator - tvOS 27.0         	-sdk appletvsimulator27.0
+
+visionOS SDKs:
+	visionOS 27.0                 	-sdk xros27.0
+
+visionOS Simulator SDKs:
+	Simulator - visionOS 27.0     	-sdk xrsimulator27.0
+
+watchOS SDKs:
+	watchOS 27.0                  	-sdk watchos27.0
+
+watchOS Simulator SDKs:
+	Simulator - watchOS 27.0      	-sdk watchsimulator27.0
+
+--- ci-diagnostics/xcodebuild.txt ---
+        ➜ Explicit dependency on target 'glog' in project 'Pods'
+    Target 'glog' in project 'Pods'
+        ➜ Explicit dependency on target 'glog-glog_privacy' in project 'Pods'
+    Target 'glog-glog_privacy' in project 'Pods' (no dependencies)
+    Target 'fmt' in project 'Pods' (no dependencies)
+    Target 'fast_float' in project 'Pods' (no dependencies)
+    Target 'boost' in project 'Pods'
+        ➜ Explicit dependency on target 'boost-boost_privacy' in project 'Pods'
+    Target 'boost-boost_privacy' in project 'Pods' (no dependencies)
+    Target 'RCT-Folly-RCT-Folly_privacy' in project 'Pods' (no dependencies)
+    Target 'EXConstants-ExpoConstants_privacy' in project 'Pods' (no dependencies)
+    Target 'EXConstants-EXConstants' in project 'Pods' (no dependencies)
+    Target 'DoubleConversion' in project 'Pods' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x c++ -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x objective-c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x objective-c++ -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode_27.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk -x assembler-with-cpp -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -V
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/usr/bin/ibtool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/runner/work/multica/multica/apps/mobile/ios/Multica/Images.xcassets
+
+ExecuteExternalTool /Applications/Xcode_27.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 4e0f611279f7d78762a6f93f078f93a1
+Build description path: /Users/runner/work/multica/multica/apps/mobile/build/DerivedData/Build/Intermediates.noindex/XCBuildData/4e0f611279f7d78762a6f93f078f93a1.xcbuilddata
+/Users/runner/work/multica/multica/apps/mobile/ios/Pods/Pods.xcodeproj: error: The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 12.4, but the range of supported deployment target versions is 15.0 to 27.0.x. (in target 'RNSVG-RNSVGFilters' from project 'Pods')
+/Users/runner/work/multica/multica/apps/mobile/ios/Pods/Pods.xcodeproj: error: The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 15.0 to 27.0.x. (in target 'SDWebImage-SDWebImage' from project 'Pods')
+note: Run script build phase '[CP-User] [RN]Check FBReactNativeSpec' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'React-RCTFBReactNativeSpec' from project 'Pods')
+note: Run script build phase '[Expo] Configure project' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Multica' from project 'Multica')
+note: Run script build phase 'Bundle React Native code and images' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Multica' from project 'Multica')
+warning: Run script build phase '[Expo Dev Launcher] Strip Local Network Keys for Release' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'Multica' from project 'Multica')
+/Users/runner/work/multica/multica/apps/mobile/ios/Pods/Pods.xcodeproj: error: The iOS deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 6.0, but the range of supported deployment target versions is 15.0 to 27.0.x. (in target 'iosMath-mathFonts' from project 'Pods')
+note: Run script build phase '[CP-User] Generate app.config for prebuilt Constants.manifest' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'EXConstants' from project 'Pods')
+warning: Run script build phase '[CP-User] [Hermes] Replace Hermes for the right configuration, if needed' will be run during every build because it does not specify any outputs. To address this issue, either add output dependencies to the script phase, or configure it to run in every build by unchecking "Based on dependency analysis" in the script phase. (in target 'hermes-engine' from project 'Pods')
+** BUILD FAILED **
+
+
+The following build commands failed:
+	Building workspace Multica with scheme Multica and configuration Release
+(1 failure)
+xcodebuild exit=65
+== git state ==
+origin	https://github.com/YYY-HUB-SYS/multica (fetch)
+origin	https://github.com/YYY-HUB-SYS/multica (push)
+62fc824 ci: harden failure diagnostics (step markers + catch-all push with retries) and add fetch-run-logs workflow to recover logs of failed runs (#24/#23)
+ M ci-diagnostics/pod-install.txt
+ M ci-diagnostics/xcodebuild.txt
+?? ci-diagnostics/FAILURE-REPORT.txt
+?? ci-diagnostics/pnpm-install.txt
+?? ci-diagnostics/runner-info.txt
+?? ci-diagnostics/steps.txt
+?? ci-diagnostics/xcode-inventory.txt
